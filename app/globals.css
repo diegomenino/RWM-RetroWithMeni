@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900;
+  }
+}
+
+@layer utilities {
+  .card-blob {
+    @apply bg-gray-200 rounded animate-pulse;
+    min-height: 3rem;
+  }
+}
