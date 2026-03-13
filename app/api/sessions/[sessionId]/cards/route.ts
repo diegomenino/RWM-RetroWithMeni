@@ -14,10 +14,10 @@ export async function GET(
   const cards = getCardsBySession(params.sessionId);
   const votes = getVotesBySession(params.sessionId);
 
-  const result = cards.map(card => {
+  const result = cards.map((card: any) => {
     const isOwn = card.author_id === participantId;
     const shouldMask = card.is_hidden === 1 && !isOwn;
-    const cardVotes = votes.filter(v => v.card_id === card.id);
+    const cardVotes = votes.filter((v: any) => v.card_id === card.id);
     return {
       id: card.id,
       columnId: card.column_id,
@@ -27,7 +27,7 @@ export async function GET(
       isHidden: card.is_hidden === 1,
       isOwn,
       voteCount: cardVotes.length,
-      hasVoted: cardVotes.some(v => v.voter_id === participantId),
+      hasVoted: cardVotes.some((v: any) => v.voter_id === participantId),
       position: card.position,
       createdAt: card.created_at,
     };
