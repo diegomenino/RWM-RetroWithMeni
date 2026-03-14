@@ -6,6 +6,7 @@ import { Column } from './Column';
 import { CardData } from './Card';
 import { PhaseControls } from '@/components/session/PhaseControls';
 import { ParticipantList } from '@/components/session/ParticipantList';
+import { CountdownTimer } from '@/components/session/CountdownTimer';
 
 interface ColumnDef {
   id: string;
@@ -358,6 +359,9 @@ export function RetroBoard({ sessionId, initialSession, initialColumns }: RetroB
           Discussion mode: click a card (below) to spotlight it for your team
         </div>
       )}
+
+      {/* Countdown Timer */}
+      <CountdownTimer />
 
       {/* Name modal */}
       {showNameModal && (
