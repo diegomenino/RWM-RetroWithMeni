@@ -5,7 +5,7 @@ export default function HomePage() {
     <main className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-lg">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-indigo-600 mb-2">RetroBoard</h1>
+          <h1 className="text-4xl font-bold text-indigo-600 mb-2">RWM</h1>
           <p className="text-gray-500">Real-time collaborative retrospectives</p>
         </div>
 

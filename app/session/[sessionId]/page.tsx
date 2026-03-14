@@ -37,6 +37,6 @@ export default function SessionPage({ params }: PageProps) {
 export function generateMetadata({ params }: PageProps) {
   const session = getSession(params.sessionId);
   return {
-    title: session ? `${session.name} — RetroBoard` : 'RetroBoard',
+    title: session ? `${session.name} — RWM` : 'RWM',
   };
 }

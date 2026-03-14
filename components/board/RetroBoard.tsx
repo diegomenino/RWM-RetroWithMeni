@@ -229,6 +229,10 @@ export function RetroBoard({ sessionId, initialSession, initialColumns }: RetroB
     socket?.emit('timer_set', { sessionId, facilitatorToken: token, durationMs });
   }
 
+  function handleSharedTimerSet(durationMs: number | null) {
+    socket?.emit('shared_timer_set', { sessionId, durationMs });
+  }
+
   function handleClearCards(token: string) {
     socket?.emit('cards_clear', { sessionId, facilitatorToken: token });
   }
@@ -268,7 +272,7 @@ export function RetroBoard({ sessionId, initialSession, initialColumns }: RetroB
       <header className="bg-white border-b border-gray-200 px-4 py-3 flex flex-col gap-2 shadow-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <h1 className="text-lg font-bold text-indigo-600">RetroBoard</h1>
+            <h1 className="text-lg font-bold text-indigo-600">RWM</h1>
             <span className="text-gray-400">|</span>
             <h2 className="text-base font-medium text-gray-800 truncate max-w-xs">{state.session.name}</h2>
           </div>
@@ -361,7 +365,11 @@ export function RetroBoard({ sessionId, initialSession, initialColumns }: RetroB
       )}
 
       {/* Countdown Timer */}
-      <CountdownTimer />
+      <CountdownTimer
+        sessionId={sessionId}
+        timerEndsAt={state.session.timerEndsAt}
+        onTimerSet={handleSharedTimerSet}
+      />
 
       {/* Name modal */}
       {showNameModal && (

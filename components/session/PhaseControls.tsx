@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const PHASES = ['write', 'vote', 'discuss', 'done'] as const;
 type Phase = typeof PHASES[number];
@@ -45,29 +45,10 @@ export function PhaseControls({
   onClearCards,
   onExport,
 }: PhaseControlsProps) {
-  const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const [confirmClear, setConfirmClear] = useState(false);
-
-  useEffect(() => {
-    if (!timerEndsAt) { setTimeLeft(null); return; }
-    const update = () => {
-      const remaining = timerEndsAt - Date.now();
-      setTimeLeft(remaining > 0 ? remaining : 0);
-    };
-    update();
-    const interval = setInterval(update, 1000);
-    return () => clearInterval(interval);
-  }, [timerEndsAt]);
 
   const currentPhaseIdx = PHASES.indexOf(phase as Phase);
   const nextPhase = PHASES[currentPhaseIdx + 1] as Phase | undefined;
-
-  function formatTime(ms: number) {
-    const s = Math.ceil(ms / 1000);
-    const m = Math.floor(s / 60);
-    const sec = s % 60;
-    return `${m}:${sec.toString().padStart(2, '0')}`;
-  }
 
   return (
     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 flex-wrap">
@@ -103,41 +84,9 @@ export function PhaseControls({
         </span>
       )}
 
-      {/* Timer display */}
-      {timeLeft !== null && (
-        <span className={`text-sm font-mono font-bold px-2 py-1 rounded ${
-          timeLeft < 30000 ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-700'
-        }`}>
-          ⏱ {formatTime(timeLeft)}
-        </span>
-      )}
-
       {/* Facilitator controls */}
       {isFacilitator && facilitatorToken && (
         <div className="flex flex-wrap gap-2 ml-auto">
-          {/* Timer buttons */}
-          {phase !== 'done' && (
-            <div className="flex gap-1">
-              {[5, 10, 15].map(min => (
-                <button
-                  key={min}
-                  onClick={() => onTimerSet(min * 60 * 1000, facilitatorToken)}
-                  className="text-xs border border-gray-300 text-gray-600 px-2 py-1 rounded hover:border-gray-400 transition-colors"
-                >
-                  {min}m
-                </button>
-              ))}
-              {timerEndsAt && (
-                <button
-                  onClick={() => onTimerSet(null, facilitatorToken)}
-                  className="text-xs border border-red-300 text-red-500 px-2 py-1 rounded hover:bg-red-50"
-                >
-                  Stop timer
-                </button>
-              )}
-            </div>
-          )}
-
           {/* Export */}
           {(phase === 'discuss' || phase === 'done') && (
             <button

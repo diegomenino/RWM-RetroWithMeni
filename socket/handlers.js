@@ -309,6 +309,20 @@ function registerHandlers(io) {
       io.to(sessionId).emit('timer_updated', { timerEndsAt });
     });
 
+    // ── shared_timer_set ────────────────────────────────────────────────────────
+    // Any participant can control the shared countdown timer
+    socket.on('shared_timer_set', ({ sessionId, durationMs }) => {
+      const session = getSession(sessionId);
+      if (!session) {
+        socket.emit('error', { message: 'Session not found' });
+        return;
+      }
+
+      const timerEndsAt = durationMs ? Date.now() + durationMs : null;
+      updateSession(sessionId, { timerEndsAt });
+      io.to(sessionId).emit('timer_updated', { timerEndsAt });
+    });
+
     // ── discuss_highlight ────────────────────────────────────────────────────────
     socket.on('discuss_highlight', ({ sessionId, facilitatorToken, cardId }) => {
       if (!validateFacilitator(sessionId, facilitatorToken)) {

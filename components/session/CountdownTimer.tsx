@@ -4,50 +4,45 @@ import { useState, useEffect, useRef } from 'react';
 
 const DURATION_OPTIONS = [5, 10, 15] as const;
 
-export function CountdownTimer() {
+interface CountdownTimerProps {
+  sessionId: string;
+  timerEndsAt: number | null;
+  onTimerSet: (durationMs: number | null) => void;
+}
+
+export function CountdownTimer({ sessionId, timerEndsAt, onTimerSet }: CountdownTimerProps) {
   const [selectedMinutes, setSelectedMinutes] = useState<number>(5);
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
-  const [running, setRunning] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const endsAtRef = useRef<number | null>(null);
+
+  const isRunning = timerEndsAt !== null;
 
   useEffect(() => {
-    if (running) {
-      const endsAt = Date.now() + selectedMinutes * 60 * 1000;
-      endsAtRef.current = endsAt;
-      setTimeLeft(selectedMinutes * 60 * 1000);
+    if (intervalRef.current) clearInterval(intervalRef.current);
 
-      intervalRef.current = setInterval(() => {
-        const remaining = (endsAtRef.current ?? 0) - Date.now();
-        if (remaining <= 0) {
-          setTimeLeft(0);
-          setRunning(false);
-          clearInterval(intervalRef.current!);
-        } else {
-          setTimeLeft(remaining);
-        }
-      }, 500);
-    } else {
-      if (intervalRef.current) clearInterval(intervalRef.current);
+    if (!timerEndsAt) {
+      setTimeLeft(null);
+      return;
     }
+
+    const update = () => {
+      const remaining = timerEndsAt - Date.now();
+      setTimeLeft(remaining > 0 ? remaining : 0);
+    };
+    update();
+    intervalRef.current = setInterval(update, 500);
+
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [running]);
+  }, [timerEndsAt]);
 
   function handleToggle() {
-    if (running) {
-      setRunning(false);
-      setTimeLeft(null);
+    if (isRunning) {
+      onTimerSet(null);
     } else {
-      setRunning(true);
+      onTimerSet(selectedMinutes * 60 * 1000);
     }
-  }
-
-  function handleSelectMinutes(min: number) {
-    if (running) return;
-    setSelectedMinutes(min);
-    setTimeLeft(null);
   }
 
   function formatTime(ms: number) {
@@ -69,10 +64,10 @@ export function CountdownTimer() {
           {DURATION_OPTIONS.map(min => (
             <button
               key={min}
-              onClick={() => handleSelectMinutes(min)}
-              disabled={running}
+              onClick={() => setSelectedMinutes(min)}
+              disabled={isRunning}
               className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-colors ${
-                selectedMinutes === min && !running
+                selectedMinutes === min && !isRunning
                   ? 'bg-indigo-600 text-white'
                   : 'border border-gray-300 text-gray-600 hover:border-indigo-400 disabled:opacity-40 disabled:cursor-not-allowed'
               }`}
@@ -105,12 +100,12 @@ export function CountdownTimer() {
         <button
           onClick={handleToggle}
           className={`text-sm font-semibold px-5 py-2 rounded-xl transition-colors ${
-            running
+            isRunning
               ? 'bg-red-500 hover:bg-red-600 text-white'
               : 'bg-indigo-600 hover:bg-indigo-700 text-white'
           }`}
         >
-          {running ? 'Stop' : isDone ? 'Restart' : 'Start'}
+          {isRunning ? 'Stop' : isDone ? 'Restart' : 'Start'}
         </button>
       </div>
     </div>
