@@ -1,4 +1,6 @@
 import { notFound } from 'next/navigation';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 import { getSession } from '@/lib/db-queries';
 import { getColumns } from '@/lib/retro-formats';
 import { SocketProvider } from '@/components/providers/SocketProvider';
@@ -8,11 +10,13 @@ interface PageProps {
   params: { sessionId: string };
 }
 
-export default function SessionPage({ params }: PageProps) {
+export default async function SessionPage({ params }: PageProps) {
   const session = getSession(params.sessionId);
   if (!session) notFound();
 
   const columns = getColumns(session.format);
+  const authSession = await getServerSession(authOptions);
+  const authDisplayName = authSession?.user?.name ?? undefined;
 
   const sessionData = {
     id: session.id,
@@ -24,7 +28,7 @@ export default function SessionPage({ params }: PageProps) {
   };
 
   return (
-    <SocketProvider sessionId={params.sessionId}>
+    <SocketProvider sessionId={params.sessionId} authDisplayName={authDisplayName}>
       <RetroBoard
         sessionId={params.sessionId}
         initialSession={sessionData}

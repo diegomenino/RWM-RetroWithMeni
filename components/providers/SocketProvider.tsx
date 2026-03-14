@@ -38,10 +38,11 @@ function generateId(): string {
 
 interface SocketProviderProps {
   sessionId: string;
+  authDisplayName?: string;
   children: React.ReactNode;
 }
 
-export function SocketProvider({ sessionId, children }: SocketProviderProps) {
+export function SocketProvider({ sessionId, authDisplayName, children }: SocketProviderProps) {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [displayName, setDisplayNameState] = useState('');
@@ -58,7 +59,7 @@ export function SocketProvider({ sessionId, children }: SocketProviderProps) {
     isFacilitatorRef.current = !!token;
 
     const storedName = localStorage.getItem(`display_name_${sessionId}`);
-    const initialName = storedName || '';
+    const initialName = storedName || authDisplayName || '';
     setDisplayNameState(initialName);
 
     const s = io({ path: '/socket.io', transports: ['websocket'] });
@@ -68,7 +69,7 @@ export function SocketProvider({ sessionId, children }: SocketProviderProps) {
       s.emit('join_session', {
         sessionId,
         participantId: pid,
-        displayName: localStorage.getItem(`display_name_${sessionId}`) || undefined,
+        displayName: localStorage.getItem(`display_name_${sessionId}`) || authDisplayName || undefined,
         facilitatorToken: token || undefined,
       });
     });
