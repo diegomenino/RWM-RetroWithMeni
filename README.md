@@ -182,7 +182,3 @@ server.js                       # Custom Node.js server (Next.js + Socket.io)
 ```
 
 ---
-
-## License
-
-MIT
