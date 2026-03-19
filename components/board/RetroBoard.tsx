@@ -259,16 +259,29 @@ export function RetroBoard({ sessionId, initialSession, initialColumns }: RetroB
   }
 
   function handleShareUrl() {
-    const url = window.location.href;
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(url).catch(() => fallbackCopy(url));
-    } else {
-      fallbackCopy(url);
-    }
-    setShareToast(true);
-    setTimeout(() => setShareToast(false), 2000);
+  const url = window.location.href;
+  if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+    navigator.clipboard.writeText(url)
+      .then(() => {
+        showToast();
+      })
+      .catch(() => {
+        fallbackCopy(url);
+        showToast();
+      });
+  } else {
+    fallbackCopy(url);
+    showToast();
   }
+}
 
+// Función auxiliar para no repetir lógica
+function showToast() {
+  setShareToast(true);
+  setTimeout(() => setShareToast(false), 2000);
+}
+
+  
   function fallbackCopy(text: string) {
     const ta = document.createElement('textarea');
     ta.value = text;
