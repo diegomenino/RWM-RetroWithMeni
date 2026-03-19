@@ -259,9 +259,26 @@ export function RetroBoard({ sessionId, initialSession, initialColumns }: RetroB
   }
 
   function handleShareUrl() {
-    navigator.clipboard.writeText(window.location.href);
+    const url = window.location.href;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url).catch(() => fallbackCopy(url));
+    } else {
+      fallbackCopy(url);
+    }
     setShareToast(true);
     setTimeout(() => setShareToast(false), 2000);
+  }
+
+  function fallbackCopy(text: string) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
   }
 
   const cardsForColumn = (colId: string) => state.cards.filter(c => c.columnId === colId);
