@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: rwm:latest
     ports:
       - "3001:3000"
     volumes:
