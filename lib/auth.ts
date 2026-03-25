@@ -1,7 +1,7 @@
-import type { NextAuthOptions } from 'next-auth';
-import GoogleProvider from 'next-auth/providers/google';
-import AzureADProvider from 'next-auth/providers/azure-ad';
-import CredentialsProvider from 'next-auth/providers/credentials';
+import NextAuth from 'next-auth';
+import Google from 'next-auth/providers/google';
+import MicrosoftEntraID from 'next-auth/providers/microsoft-entra-id';
+import Credentials from 'next-auth/providers/credentials';
 
 const hasSSOConfigured =
   (!!process.env.GOOGLE_CLIENT_ID && !!process.env.GOOGLE_CLIENT_SECRET) ||
@@ -9,11 +9,11 @@ const hasSSOConfigured =
     !!process.env.AZURE_AD_CLIENT_SECRET &&
     !!process.env.AZURE_AD_TENANT_ID);
 
-export const authOptions: NextAuthOptions = {
+export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
       ? [
-          GoogleProvider({
+          Google({
             clientId: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
           }),
@@ -23,7 +23,7 @@ export const authOptions: NextAuthOptions = {
     process.env.AZURE_AD_CLIENT_SECRET &&
     process.env.AZURE_AD_TENANT_ID
       ? [
-          AzureADProvider({
+          MicrosoftEntraID({
             clientId: process.env.AZURE_AD_CLIENT_ID,
             clientSecret: process.env.AZURE_AD_CLIENT_SECRET,
             tenantId: process.env.AZURE_AD_TENANT_ID,
@@ -32,14 +32,14 @@ export const authOptions: NextAuthOptions = {
       : []),
     ...(!hasSSOConfigured
       ? [
-          CredentialsProvider({
+          Credentials({
             id: 'email-only',
             name: 'Email',
             credentials: {
               email: { label: 'Email', type: 'email' },
             },
             async authorize(credentials) {
-              const email = credentials?.email?.trim().toLowerCase();
+              const email = (credentials?.email as string)?.trim().toLowerCase();
               if (!email || !email.includes('@')) return null;
               const name = email.split('@')[0].replace(/[._-]/g, ' ');
               return {
@@ -64,4 +64,4 @@ export const authOptions: NextAuthOptions = {
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
-};
+});

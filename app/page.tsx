@@ -1,4 +1,5 @@
 import { CreateSessionForm } from '@/components/session/CreateSessionForm';
+import { LookupSessionForm } from '@/components/session/LookupSessionForm';
 
 export default function HomePage() {
   return (
@@ -12,6 +13,11 @@ export default function HomePage() {
         <div className="bg-white rounded-2xl shadow-lg p-6">
           <h2 className="text-xl font-semibold mb-4">Create a New Session</h2>
           <CreateSessionForm />
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-lg p-6 mt-4">
+          <h2 className="text-base font-semibold text-gray-700 mb-3">View a Previous Session</h2>
+          <LookupSessionForm />
         </div>
 
         <p className="text-center text-sm text-gray-400 mt-4">

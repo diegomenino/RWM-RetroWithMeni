@@ -3,16 +3,17 @@ import { getSession, getCardsBySession, getVotesBySession } from '@/lib/db-queri
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { sessionId: string } }
+  { params }: { params: Promise<{ sessionId: string }> }
 ) {
-  const session = getSession(params.sessionId);
+  const { sessionId } = await params;
+  const session = getSession(sessionId);
   if (!session) {
     return NextResponse.json({ error: 'Session not found' }, { status: 404 });
   }
 
   const participantId = req.nextUrl.searchParams.get('participantId') || '';
-  const cards = getCardsBySession(params.sessionId);
-  const votes = getVotesBySession(params.sessionId);
+  const cards = getCardsBySession(sessionId);
+  const votes = getVotesBySession(sessionId);
 
   const result = cards.map((card: any) => {
     const isOwn = card.author_id === participantId;

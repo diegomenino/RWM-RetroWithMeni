@@ -4,9 +4,10 @@ import { getColumns } from '@/lib/retro-formats';
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { sessionId: string } }
+  { params }: { params: Promise<{ sessionId: string }> }
 ) {
-  const session = getSession(params.sessionId);
+  const { sessionId } = await params;
+  const session = getSession(sessionId);
   if (!session) {
     return NextResponse.json({ error: 'Session not found' }, { status: 404 });
   }
@@ -25,10 +26,11 @@ export async function GET(
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { sessionId: string } }
+  { params }: { params: Promise<{ sessionId: string }> }
 ) {
+  const { sessionId } = await params;
   const token = req.headers.get('x-facilitator-token');
-  if (!token || !validateFacilitator(params.sessionId, token)) {
+  if (!token || !validateFacilitator(sessionId, token)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
   }
 
@@ -38,6 +40,6 @@ export async function PATCH(
   if (body.maxVotes !== undefined) updates.maxVotes = body.maxVotes;
   if (body.timerEndsAt !== undefined) updates.timerEndsAt = body.timerEndsAt;
 
-  const updated = updateSession(params.sessionId, updates);
+  const updated = updateSession(sessionId, updates);
   return NextResponse.json({ id: updated.id, phase: updated.phase });
 }

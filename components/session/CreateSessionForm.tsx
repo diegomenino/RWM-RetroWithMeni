@@ -9,8 +9,8 @@ const FORMAT_IDS = Object.keys(RETRO_FORMATS) as Array<keyof typeof RETRO_FORMAT
 export function CreateSessionForm() {
   const router = useRouter();
   const [name, setName] = useState('');
-  const [format, setFormat] = useState('start-stop-continue');
-  const [maxVotes, setMaxVotes] = useState(3);
+  const [format, setFormat] = useState('went-well-improve');
+  const [maxVotes, setMaxVotes] = useState(5);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
