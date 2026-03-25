@@ -1,5 +1,7 @@
 # RWM — Retro With Meni
 
+**v1.0.0**
+
 A real-time collaborative retrospective tool for agile teams. Create a session, invite your team via a link, and run structured retrospectives together — live, in the browser.
 
 ---
@@ -14,19 +16,22 @@ A real-time collaborative retrospective tool for agile teams. Create a session, 
 - **Discussion mode** — facilitator spotlights cards one at a time for focused discussion
 - **Synchronized countdown timer** — shared timer visible to all participants
 - **SSO authentication** — Google, Microsoft Azure AD, or email-only login
-- **Export** — download session results as JSON
+- **View previous sessions** — look up any past session by ID in read-only mode
+- **Export** — download session results as JSON or CSV
 - **Docker-ready** — single container with embedded SQLite database
 
 ---
 
 ## Retrospective Formats
 
+Default format is **Went Well / Improve / Actions**. Default votes per person is **5**.
+
 | Format | Columns |
 |--------|---------|
+| **Went Well / Improve / Actions** | 👍 Went Well · 🔧 Improve · 📋 Actions |
 | **Start / Stop / Continue** | 🚀 Start · 🛑 Stop · ✅ Continue |
 | **4Ls** | ❤️ Liked · 📚 Learned · ⚠️ Lacked · 🌟 Longed For |
 | **Mad / Sad / Glad** | 😡 Mad · 😢 Sad · 😊 Glad |
-| **Went Well / Improve / Actions** | 👍 Went Well · 🔧 Improve · 📋 Actions |
 
 ---
 
@@ -100,7 +105,7 @@ RWM supports three authentication modes, configured via environment variables in
 ### Microsoft Azure AD
 
 1. Go to [Azure Portal](https://portal.azure.com) → Azure Active Directory → App registrations → New registration
-2. Set redirect URI: `http://your-server:8011/api/auth/callback/azure-ad`
+2. Set redirect URI: `http://your-server:8011/api/auth/callback/microsoft-entra-id`
 3. Create a client secret under **Certificates & secrets**
 4. Add to `docker-compose.yml`:
 
@@ -120,11 +125,11 @@ If neither Google nor Azure AD is configured, the sign-in page automatically sho
 
 | Layer | Technology |
 |-------|-----------|
-| Framework | Next.js 14 (App Router) |
+| Framework | Next.js 16 (App Router, Turbopack) |
 | Language | TypeScript |
 | Real-time | Socket.io |
 | Database | SQLite (better-sqlite3) |
-| Auth | NextAuth.js v4 |
+| Auth | Auth.js v5 (next-auth) |
 | Styling | Tailwind CSS |
 | Runtime | Node.js 20 |
 | Container | Docker |
@@ -155,22 +160,25 @@ App runs at **http://localhost:3000** in development.
 
 ```
 app/
-├── page.tsx                    # Home — create a session
+├── page.tsx                    # Home — create or look up a session
 ├── layout.tsx                  # Root layout with AuthProvider
 ├── auth/signin/                # Custom sign-in page
 ├── api/
-│   ├── auth/[...nextauth]/     # NextAuth handler
+│   ├── auth/[...nextauth]/     # Auth.js v5 handler
 │   ├── sessions/               # Session CRUD
-│   └── sessions/[id]/export/   # JSON export
-└── session/[sessionId]/        # Board page
+│   └── sessions/[id]/export/   # JSON/CSV export
+└── session/[sessionId]/
+    ├── page.tsx                # Live board
+    └── view/page.tsx           # Read-only session viewer
 
 components/
 ├── board/                      # RetroBoard, Column, Card, VoteButton
-├── session/                    # PhaseControls, CountdownTimer, ParticipantList
+├── session/                    # PhaseControls, CountdownTimer, ParticipantList,
+│                               # CreateSessionForm, LookupSessionForm
 └── providers/                  # SocketProvider, AuthProvider
 
 lib/
-├── auth.ts                     # NextAuth config
+├── auth.ts                     # Auth.js v5 config
 ├── db.js                       # SQLite connection
 ├── db-queries.js               # Database helpers
 └── retro-formats.js            # Column definitions per format
@@ -178,7 +186,12 @@ lib/
 socket/
 └── handlers.js                 # Socket.io event handlers
 
+proxy.ts                        # Auth middleware (Next.js 16)
 server.js                       # Custom Node.js server (Next.js + Socket.io)
 ```
 
 ---
+
+## License
+
+MIT
