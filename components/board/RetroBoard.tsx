@@ -382,6 +382,7 @@ function showToast() {
                 column={col}
                 cards={cardsForColumn(col.id)}
                 phase={state.session.phase}
+                format={state.session.format}
                 votesRemaining={state.votesRemaining}
                 highlightedCardId={state.highlightedCardId}
                 onAddCard={handleAddCard}

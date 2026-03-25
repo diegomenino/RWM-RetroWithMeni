@@ -18,6 +18,7 @@ interface ColumnProps {
   column: ColumnDefinition;
   cards: CardData[];
   phase: string;
+  format: string;
   votesRemaining: number;
   highlightedCardId: string | null;
   onAddCard: (columnId: string, content: string) => void;
@@ -31,6 +32,7 @@ export function Column({
   column,
   cards,
   phase,
+  format,
   votesRemaining,
   highlightedCardId,
   onAddCard,
@@ -52,7 +54,7 @@ export function Column({
       style={{ borderRadius: '20px', border: '1px solid var(--border)', boxShadow: 'var(--panel-shadow)', background: 'var(--surface-solid)' }}>
       <div className={`${column.header} px-4 py-3 flex items-center justify-between`}>
         <span className="font-bold text-[13px] text-white tracking-[0.05px]">
-          {column.emoji} {column.label}
+          {column.emoji} {t(`formats.${format}.${column.id}`) || column.label}
         </span>
         <span className="bg-white/30 text-white text-[11px] font-bold px-2 py-0.5 rounded-full">
           {cards.length}
@@ -83,7 +85,7 @@ export function Column({
                   setShowForm(false);
                 }}
                 onCancel={() => setShowForm(false)}
-                placeholder={t('board.addTo', { column: column.label })}
+                placeholder={t('board.addTo', { column: t(`formats.${format}.${column.id}`) || column.label })}
               />
             </div>
           ) : (
