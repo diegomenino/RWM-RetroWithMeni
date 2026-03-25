@@ -4,20 +4,21 @@ import { getColumns } from '@/lib/retro-formats';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { sessionId: string } }
+  { params }: { params: Promise<{ sessionId: string }> }
 ) {
+  const { sessionId } = await params;
   const token = req.headers.get('x-facilitator-token');
-  if (!token || !validateFacilitator(params.sessionId, token)) {
+  if (!token || !validateFacilitator(sessionId, token)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
   }
 
-  const session = getSession(params.sessionId);
+  const session = getSession(sessionId);
   if (!session) {
     return NextResponse.json({ error: 'Session not found' }, { status: 404 });
   }
 
-  const cards = getCardsBySession(params.sessionId);
-  const votes = getVotesBySession(params.sessionId);
+  const cards = getCardsBySession(sessionId);
+  const votes = getVotesBySession(sessionId);
   const columns = getColumns(session.format);
 
   const exportCards = cards.map(card => ({
@@ -38,7 +39,7 @@ export async function GET(
     return new NextResponse(header + rows, {
       headers: {
         'Content-Type': 'text/csv',
-        'Content-Disposition': `attachment; filename="retro-${params.sessionId}.csv"`,
+        'Content-Disposition': `attachment; filename="retro-${sessionId}.csv"`,
       },
     });
   }

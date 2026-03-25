@@ -1,21 +1,21 @@
 import { notFound } from 'next/navigation';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { auth } from '@/lib/auth';
 import { getSession } from '@/lib/db-queries';
 import { getColumns } from '@/lib/retro-formats';
 import { SocketProvider } from '@/components/providers/SocketProvider';
 import { RetroBoard } from '@/components/board/RetroBoard';
 
 interface PageProps {
-  params: { sessionId: string };
+  params: Promise<{ sessionId: string }>;
 }
 
 export default async function SessionPage({ params }: PageProps) {
-  const session = getSession(params.sessionId);
+  const { sessionId } = await params;
+  const session = getSession(sessionId);
   if (!session) notFound();
 
   const columns = getColumns(session.format);
-  const authSession = await getServerSession(authOptions);
+  const authSession = await auth();
   const authDisplayName = authSession?.user?.name ?? undefined;
 
   const sessionData = {
@@ -28,9 +28,9 @@ export default async function SessionPage({ params }: PageProps) {
   };
 
   return (
-    <SocketProvider sessionId={params.sessionId} authDisplayName={authDisplayName}>
+    <SocketProvider sessionId={sessionId} authDisplayName={authDisplayName}>
       <RetroBoard
-        sessionId={params.sessionId}
+        sessionId={sessionId}
         initialSession={sessionData}
         initialColumns={columns}
       />
@@ -38,8 +38,9 @@ export default async function SessionPage({ params }: PageProps) {
   );
 }
 
-export function generateMetadata({ params }: PageProps) {
-  const session = getSession(params.sessionId);
+export async function generateMetadata({ params }: PageProps) {
+  const { sessionId } = await params;
+  const session = getSession(sessionId);
   return {
     title: session ? `${session.name} — RWM` : 'RWM',
   };
