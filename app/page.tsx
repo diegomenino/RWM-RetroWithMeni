@@ -10,9 +10,9 @@ export default function HomePage() {
     <main className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-lg">
         <div className="text-center mb-8">
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-2xl font-extrabold mx-auto mb-4"
+          <div className="rounded-2xl flex items-center justify-center text-white text-2xl font-extrabold mx-auto mb-4 px-3 py-3"
             style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', boxShadow: '0 8px 24px rgba(99,102,241,0.4)' }}>
-            R
+            RWM
           </div>
           <h1 className="text-2xl font-extrabold text-gray-900 mb-1">RWM</h1>
           <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{t('home.subtitle')}</p>
