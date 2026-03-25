@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8011:3000"
+      - "3001:3000"
     volumes:
       - rwm-data:/app/data
     environment:
@@ -13,7 +13,7 @@ services:
       - DB_PATH=/app/data/retro.db
       - NEXT_PUBLIC_APP_URL=http://localhost:3000
       # NextAuth — required
-      - NEXTAUTH_URL=http://localhost:8011
+      - NEXTAUTH_URL=http://localhost:3000
       - NEXTAUTH_SECRET=change-me-use-openssl-rand-base64-32
       # Google SSO (optional — remove if not using)
       - GOOGLE_CLIENT_ID=
