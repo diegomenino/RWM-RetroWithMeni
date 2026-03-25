@@ -299,30 +299,35 @@ function showToast() {
   return (
     <div className="flex flex-col h-screen">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-4 py-3 flex flex-col gap-2 shadow-sm">
+      <header className="px-4 py-3 flex flex-col gap-2 relative z-10"
+        style={{ background: 'rgba(255,255,255,0.88)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(99,102,241,0.1)', boxShadow: '0 1px 24px rgba(99,102,241,0.07)' }}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <h1 className="text-lg font-bold text-indigo-600">RWM</h1>
-            <span className="text-gray-400">|</span>
-            <h2 className="text-base font-medium text-gray-800 truncate max-w-xs">{state.session.name}</h2>
+            <div className="w-8 h-8 rounded-[10px] flex items-center justify-center text-white text-sm font-bold"
+              style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', boxShadow: '0 4px 14px rgba(99,102,241,0.4)' }}>
+              R
+            </div>
+            <h2 className="text-sm font-semibold text-gray-800 truncate max-w-xs">{state.session.name}</h2>
           </div>
           <div className="flex items-center gap-2">
             <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400' : 'bg-red-400'}`} />
-            <span className="text-xs text-gray-500">{isConnected ? 'Connected' : 'Disconnected'}</span>
+            <span className="text-xs text-gray-400">{isConnected ? 'Connected' : 'Disconnected'}</span>
             <button
               onClick={() => { setNameInput(displayName); setShowNameModal(true); }}
-              className="text-xs border border-gray-300 px-2 py-1 rounded hover:border-gray-400"
+              className="text-xs px-3 py-1.5 rounded-[10px] font-medium transition-all hover:-translate-y-px"
+              style={{ background: 'white', border: '1.5px solid #e0e7ff', color: '#374151' }}
               title="Change your name"
             >
               👤 {displayName || 'Set name'}
             </button>
             <button
               onClick={handleShareUrl}
-              className="text-xs bg-indigo-50 border border-indigo-300 text-indigo-600 px-2 py-1 rounded hover:bg-indigo-100 relative"
+              className="text-xs px-3 py-1.5 rounded-[10px] font-semibold text-white transition-all hover:-translate-y-px relative"
+              style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', boxShadow: '0 4px 14px rgba(99,102,241,0.38)' }}
             >
               🔗 Share
               {shareToast && (
-                <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 text-xs bg-gray-800 text-white px-2 py-1 rounded whitespace-nowrap">
+                <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs bg-gray-800 text-white px-2 py-1 rounded-lg whitespace-nowrap">
                   Copied!
                 </span>
               )}
@@ -348,7 +353,7 @@ function showToast() {
       </header>
 
       {/* Board */}
-      <main className="flex-1 overflow-auto p-4">
+      <main className="flex-1 overflow-auto p-4 relative z-10">
         {state.session.phase === 'done' ? (
           <div className="flex flex-col items-center justify-center h-full gap-4">
             <div className="text-5xl">🎉</div>
@@ -357,7 +362,8 @@ function showToast() {
             {isFacilitator && facilitatorToken && (
               <button
                 onClick={() => handleExport(facilitatorToken)}
-                className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700"
+                className="text-white px-6 py-2.5 rounded-xl font-semibold transition-all hover:-translate-y-px"
+                style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', boxShadow: '0 4px 14px rgba(99,102,241,0.38)' }}
               >
                 Download Export
               </button>
@@ -403,9 +409,11 @@ function showToast() {
 
       {/* Name modal */}
       {showNameModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 w-80 shadow-xl">
-            <h3 className="text-lg font-semibold mb-3">Set your display name</h3>
+        <div className="fixed inset-0 flex items-center justify-center z-50"
+          style={{ background: 'rgba(79,70,229,0.12)', backdropFilter: 'blur(10px)' }}>
+          <div className="bg-white p-6 w-80"
+            style={{ borderRadius: '24px', boxShadow: '0 32px 80px rgba(99,102,241,0.18), 0 8px 24px rgba(0,0,0,0.08)' }}>
+            <h3 className="text-[17px] font-extrabold mb-4 text-gray-900">Set your display name</h3>
             <input
               type="text"
               value={nameInput}
@@ -415,17 +423,22 @@ function showToast() {
                 if (e.key === 'Escape') setShowNameModal(false);
               }}
               maxLength={30}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-3"
+              className="w-full px-3 py-2.5 mb-4 text-sm rounded-xl outline-none transition-all"
+              style={{ border: '1.5px solid #e0e7ff', background: '#fafbff' }}
+              onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.background = 'white'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)'; }}
+              onBlur={e => { e.target.style.borderColor = '#e0e7ff'; e.target.style.background = '#fafbff'; e.target.style.boxShadow = 'none'; }}
               autoFocus
             />
             <div className="flex gap-2 justify-end">
-              <button onClick={() => setShowNameModal(false)} className="text-sm text-gray-500 px-3 py-1">
+              <button onClick={() => setShowNameModal(false)}
+                className="text-sm text-gray-500 px-3 py-1.5 rounded-xl hover:bg-gray-50 transition-colors">
                 Cancel
               </button>
               <button
                 onClick={() => { setDisplayName(nameInput); setShowNameModal(false); }}
                 disabled={!nameInput.trim()}
-                className="text-sm bg-indigo-600 text-white px-4 py-1 rounded-lg hover:bg-indigo-700 disabled:opacity-50"
+                className="text-sm text-white px-4 py-1.5 rounded-xl font-semibold disabled:opacity-50 transition-all hover:-translate-y-px"
+                style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', boxShadow: '0 4px 14px rgba(99,102,241,0.38)' }}
               >
                 Save
               </button>

@@ -91,7 +91,8 @@ export function PhaseControls({
           {(phase === 'discuss' || phase === 'done') && (
             <button
               onClick={() => onExport(facilitatorToken)}
-              className="text-xs border border-green-400 text-green-600 px-3 py-1 rounded-lg hover:bg-green-50 transition-colors"
+              className="text-xs px-3 py-1.5 rounded-[10px] font-semibold transition-all hover:-translate-y-px"
+              style={{ border: '1.5px solid #86efac', color: '#16a34a', background: 'white' }}
             >
               Export JSON
             </button>
@@ -103,13 +104,15 @@ export function PhaseControls({
               <div className="flex gap-1">
                 <button
                   onClick={() => { onClearCards(facilitatorToken); setConfirmClear(false); }}
-                  className="text-xs bg-red-500 text-white px-2 py-1 rounded"
+                  className="text-xs text-white px-3 py-1.5 rounded-[10px] font-semibold transition-all"
+                  style={{ background: 'linear-gradient(135deg, #ef4444, #dc2626)', boxShadow: '0 3px 10px rgba(239,68,68,0.3)' }}
                 >
                   Confirm clear
                 </button>
                 <button
                   onClick={() => setConfirmClear(false)}
-                  className="text-xs border border-gray-300 px-2 py-1 rounded"
+                  className="text-xs px-3 py-1.5 rounded-[10px] font-medium transition-all"
+                  style={{ border: '1.5px solid #e0e7ff', color: '#6b7280', background: 'white' }}
                 >
                   Cancel
                 </button>
@@ -117,7 +120,8 @@ export function PhaseControls({
             ) : (
               <button
                 onClick={() => setConfirmClear(true)}
-                className="text-xs border border-red-300 text-red-500 px-2 py-1 rounded hover:bg-red-50"
+                className="text-xs px-3 py-1.5 rounded-[10px] font-semibold transition-all hover:-translate-y-px"
+                style={{ border: '1.5px solid #fca5a5', color: '#ef4444', background: 'white' }}
               >
                 Clear all cards
               </button>
@@ -128,7 +132,8 @@ export function PhaseControls({
           {nextPhase && (
             <button
               onClick={() => onPhaseAdvance(nextPhase, facilitatorToken)}
-              className="text-xs bg-indigo-600 text-white px-3 py-1 rounded-lg hover:bg-indigo-700 font-medium transition-colors"
+              className="text-xs text-white px-3 py-1.5 rounded-[10px] font-semibold transition-all hover:-translate-y-px"
+              style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', boxShadow: '0 4px 14px rgba(99,102,241,0.38)' }}
             >
               {NEXT_PHASE_LABEL[phase]} →
             </button>

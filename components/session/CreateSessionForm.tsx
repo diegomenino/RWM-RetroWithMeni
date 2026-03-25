@@ -45,7 +45,7 @@ export function CreateSessionForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1.5">
           Session Name
         </label>
         <input
@@ -55,42 +55,47 @@ export function CreateSessionForm() {
           placeholder="e.g. Sprint 42 Retrospective"
           required
           maxLength={100}
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full px-3 py-2.5 text-sm rounded-xl outline-none transition-all"
+          style={{ border: '1.5px solid #e0e7ff', background: '#fafbff' }}
+          onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.background = 'white'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)'; }}
+          onBlur={e => { e.target.style.borderColor = '#e0e7ff'; e.target.style.background = '#fafbff'; e.target.style.boxShadow = 'none'; }}
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1.5">
           Format
         </label>
         <div className="grid grid-cols-1 gap-2">
           {FORMAT_IDS.map(id => {
             const fmt = RETRO_FORMATS[id];
+            const selected = format === id;
             return (
               <label
                 key={id}
-                className={`flex items-start gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${
-                  format === id
-                    ? 'border-indigo-500 bg-indigo-50'
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
+                className="flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all"
+                style={{
+                  border: selected ? '1.5px solid #6366f1' : '1.5px solid #e0e7ff',
+                  background: selected ? '#eef2ff' : 'white',
+                  boxShadow: selected ? '0 0 0 3px rgba(99,102,241,0.08)' : 'none',
+                }}
               >
                 <input
                   type="radio"
                   name="format"
                   value={id}
-                  checked={format === id}
+                  checked={selected}
                   onChange={() => setFormat(id)}
-                  className="mt-0.5"
+                  className="mt-0.5 accent-indigo-600"
                 />
                 <div>
-                  <div className="font-medium text-sm">{fmt.label}</div>
-                  <div className="text-xs text-gray-500">{fmt.description}</div>
-                  <div className="flex gap-1 mt-1">
+                  <div className="font-semibold text-sm text-gray-800">{fmt.label}</div>
+                  <div className="text-xs text-gray-400 mt-0.5">{fmt.description}</div>
+                  <div className="flex flex-wrap gap-1 mt-1.5">
                     {fmt.columns.map(col => (
                       <span
                         key={col.id}
-                        className={`text-xs px-2 py-0.5 rounded-full ${col.color} ${col.border} border`}
+                        className={`text-xs px-2 py-0.5 rounded-full ${col.color} border ${col.border}`}
                       >
                         {col.emoji} {col.label}
                       </span>
@@ -104,13 +109,16 @@ export function CreateSessionForm() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1.5">
           Votes per person
         </label>
         <select
           value={maxVotes}
           onChange={e => setMaxVotes(Number(e.target.value))}
-          className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="px-3 py-2.5 text-sm rounded-xl outline-none transition-all"
+          style={{ border: '1.5px solid #e0e7ff', background: '#fafbff' }}
+          onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)'; }}
+          onBlur={e => { e.target.style.borderColor = '#e0e7ff'; e.target.style.boxShadow = 'none'; }}
         >
           {[1, 2, 3, 4, 5, 6, 7, 8, 10].map(n => (
             <option key={n} value={n}>{n} vote{n !== 1 ? 's' : ''}</option>
@@ -119,13 +127,14 @@ export function CreateSessionForm() {
       </div>
 
       {error && (
-        <p className="text-red-600 text-sm">{error}</p>
+        <p className="text-red-500 text-sm bg-red-50 px-3 py-2 rounded-xl">{error}</p>
       )}
 
       <button
         type="submit"
         disabled={loading || !name.trim()}
-        className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        className="w-full text-white py-2.5 px-4 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:-translate-y-px"
+        style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed, #9333ea)', boxShadow: '0 4px 14px rgba(99,102,241,0.38)' }}
       >
         {loading ? 'Creating…' : 'Create Session'}
       </button>

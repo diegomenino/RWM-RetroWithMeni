@@ -46,13 +46,17 @@ function SignInContent() {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-6 flex flex-col gap-3">
+    <div className="p-6 flex flex-col gap-3"
+      style={{ background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(20px)', borderRadius: '24px', border: '1px solid rgba(99,102,241,0.1)', boxShadow: '0 8px 32px rgba(99,102,241,0.12), 0 2px 8px rgba(0,0,0,0.04)' }}>
       {/* SSO buttons */}
       {ssoProviders.map(provider => (
         <button
           key={provider.id}
           onClick={() => signIn(provider.id, { callbackUrl })}
-          className="flex items-center justify-center gap-3 w-full border border-gray-300 rounded-xl px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-indigo-400 transition-colors"
+          className="flex items-center justify-center gap-3 w-full px-4 py-3 text-sm font-semibold text-gray-700 rounded-xl transition-all hover:-translate-y-px"
+          style={{ border: '1.5px solid #e0e7ff', background: 'white', boxShadow: '0 1px 4px rgba(99,102,241,0.06)' }}
+          onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#a5b4fc'; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#e0e7ff'; }}
         >
           <span>{PROVIDER_ICONS[provider.id]}</span>
           Continue with {provider.name}
@@ -62,9 +66,9 @@ function SignInContent() {
       {/* Divider when both exist */}
       {ssoProviders.length > 0 && hasEmailOnly && (
         <div className="flex items-center gap-3 my-1">
-          <div className="flex-1 h-px bg-gray-200" />
+          <div className="flex-1 h-px" style={{ background: '#e0e7ff' }} />
           <span className="text-xs text-gray-400">or</span>
-          <div className="flex-1 h-px bg-gray-200" />
+          <div className="flex-1 h-px" style={{ background: '#e0e7ff' }} />
         </div>
       )}
 
@@ -77,13 +81,17 @@ function SignInContent() {
             value={email}
             onChange={e => setEmail(e.target.value)}
             required
-            className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-4 py-3 text-sm rounded-xl outline-none transition-all"
+            style={{ border: '1.5px solid #e0e7ff', background: '#fafbff' }}
+            onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.background = 'white'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)'; }}
+            onBlur={e => { e.target.style.borderColor = '#e0e7ff'; e.target.style.background = '#fafbff'; e.target.style.boxShadow = 'none'; }}
           />
-          {error && <p className="text-xs text-red-500">{error}</p>}
+          {error && <p className="text-xs text-red-500 bg-red-50 px-3 py-1.5 rounded-lg">{error}</p>}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl px-4 py-3 text-sm font-semibold transition-colors disabled:opacity-50"
+            className="w-full text-white px-4 py-3 text-sm font-semibold rounded-xl disabled:opacity-50 transition-all hover:-translate-y-px"
+            style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed, #9333ea)', boxShadow: '0 4px 14px rgba(99,102,241,0.38)' }}
           >
             {loading ? 'Signing in…' : 'Continue with Email'}
           </button>
@@ -99,11 +107,15 @@ function SignInContent() {
 
 export default function SignInPage() {
   return (
-    <main className="min-h-screen flex items-center justify-center p-4 bg-gray-50">
+    <main className="min-h-screen flex items-center justify-center p-4 relative z-10">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-indigo-600 mb-2">RWM</h1>
-          <p className="text-gray-500">Sign in to continue</p>
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-2xl font-extrabold mx-auto mb-4"
+            style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', boxShadow: '0 8px 24px rgba(99,102,241,0.4)' }}>
+            R
+          </div>
+          <h1 className="text-2xl font-extrabold text-gray-900 mb-1">Welcome to RWM</h1>
+          <p className="text-sm text-gray-400">Sign in to continue</p>
         </div>
         <Suspense fallback={<div className="bg-white rounded-2xl shadow-lg p-6 text-center text-sm text-gray-400">Loading…</div>}>
           <SignInContent />

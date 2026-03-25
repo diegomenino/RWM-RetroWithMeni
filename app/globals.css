@@ -4,13 +4,45 @@
 
 @layer base {
   body {
-    @apply bg-gray-50 text-gray-900;
+    -webkit-font-smoothing: antialiased;
+    color: #111827;
   }
 }
 
+/* Ambient background blobs */
+body::before {
+  content: '';
+  position: fixed;
+  top: -100px;
+  left: -100px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.12), transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  bottom: -100px;
+  right: -100px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.1), transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.2); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(99, 102, 241, 0.35); }
+
 @layer utilities {
   .card-blob {
-    @apply bg-gray-200 rounded animate-pulse;
+    @apply bg-indigo-100/60 rounded animate-pulse;
     min-height: 3rem;
   }
 }
