@@ -11,20 +11,20 @@ export default function HomePage() {
             R
           </div>
           <h1 className="text-2xl font-extrabold text-gray-900 mb-1">RWM</h1>
-          <p className="text-sm text-gray-400">Real-time collaborative retrospectives</p>
+          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Real-time collaborative retrospectives</p>
         </div>
 
-        <div className="p-6 relative z-10" style={{ background: 'rgba(255,255,255,0.88)', backdropFilter: 'blur(20px)', borderRadius: '24px', border: '1px solid rgba(99,102,241,0.1)', boxShadow: '0 8px 32px rgba(99,102,241,0.1), 0 2px 8px rgba(0,0,0,0.04)' }}>
-          <h2 className="text-[17px] font-extrabold mb-4 text-gray-900">Create a New Session</h2>
+        <div className="p-6 relative z-10" style={{ background: 'var(--surface)', backdropFilter: 'blur(20px)', borderRadius: '24px', border: '1px solid var(--border)', boxShadow: 'var(--panel-shadow)' }}>
+          <h2 className="text-[17px] font-extrabold mb-4" style={{ color: 'var(--text)' }}>Create a New Session</h2>
           <CreateSessionForm />
         </div>
 
-        <div className="p-5 mt-4 relative z-10" style={{ background: 'rgba(255,255,255,0.88)', backdropFilter: 'blur(20px)', borderRadius: '20px', border: '1px solid rgba(99,102,241,0.1)', boxShadow: '0 4px 16px rgba(99,102,241,0.07)' }}>
-          <h2 className="text-sm font-bold text-gray-700 mb-3">View a Previous Session</h2>
+        <div className="p-5 mt-4 relative z-10" style={{ background: 'var(--surface)', backdropFilter: 'blur(20px)', borderRadius: '20px', border: '1px solid var(--border)', boxShadow: 'var(--panel-shadow)' }}>
+          <h2 className="text-sm font-bold mb-3" style={{ color: 'var(--text-secondary)' }}>View a Previous Session</h2>
           <LookupSessionForm />
         </div>
 
-        <p className="text-center text-sm text-gray-400 mt-4">
+        <p className="text-center text-sm mt-4" style={{ color: 'var(--text-subtle)' }}>
           Have a session link? Just open it to join automatically.
         </p>
       </div>

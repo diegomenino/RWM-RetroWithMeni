@@ -56,9 +56,9 @@ export function CreateSessionForm() {
           required
           maxLength={100}
           className="w-full px-3 py-2.5 text-sm rounded-xl outline-none transition-all"
-          style={{ border: '1.5px solid #e0e7ff', background: '#fafbff' }}
-          onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.background = 'white'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)'; }}
-          onBlur={e => { e.target.style.borderColor = '#e0e7ff'; e.target.style.background = '#fafbff'; e.target.style.boxShadow = 'none'; }}
+          style={{ border: '1.5px solid var(--border-input)', background: 'var(--surface-dim)', color: 'var(--text)' }}
+          onFocus={e => { e.target.style.borderColor = 'var(--border-input-focus)'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)'; }}
+          onBlur={e => { e.target.style.borderColor = 'var(--border-input)'; e.target.style.boxShadow = 'none'; }}
         />
       </div>
 
@@ -75,8 +75,8 @@ export function CreateSessionForm() {
                 key={id}
                 className="flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all"
                 style={{
-                  border: selected ? '1.5px solid #6366f1' : '1.5px solid #e0e7ff',
-                  background: selected ? '#eef2ff' : 'white',
+                  border: selected ? '1.5px solid var(--border-input-focus)' : '1.5px solid var(--border-input)',
+                  background: selected ? 'rgba(99,102,241,0.08)' : 'var(--surface-solid)',
                   boxShadow: selected ? '0 0 0 3px rgba(99,102,241,0.08)' : 'none',
                 }}
               >
@@ -89,8 +89,8 @@ export function CreateSessionForm() {
                   className="mt-0.5 accent-indigo-600"
                 />
                 <div>
-                  <div className="font-semibold text-sm text-gray-800">{fmt.label}</div>
-                  <div className="text-xs text-gray-400 mt-0.5">{fmt.description}</div>
+                  <div className="font-semibold text-sm" style={{ color: 'var(--text)' }}>{fmt.label}</div>
+                  <div className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{fmt.description}</div>
                   <div className="flex flex-wrap gap-1 mt-1.5">
                     {fmt.columns.map(col => (
                       <span
@@ -116,9 +116,9 @@ export function CreateSessionForm() {
           value={maxVotes}
           onChange={e => setMaxVotes(Number(e.target.value))}
           className="px-3 py-2.5 text-sm rounded-xl outline-none transition-all"
-          style={{ border: '1.5px solid #e0e7ff', background: '#fafbff' }}
-          onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)'; }}
-          onBlur={e => { e.target.style.borderColor = '#e0e7ff'; e.target.style.boxShadow = 'none'; }}
+          style={{ border: '1.5px solid var(--border-input)', background: 'var(--surface-dim)', color: 'var(--text)' }}
+          onFocus={e => { e.target.style.borderColor = 'var(--border-input-focus)'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)'; }}
+          onBlur={e => { e.target.style.borderColor = 'var(--border-input)'; e.target.style.boxShadow = 'none'; }}
         >
           {[1, 2, 3, 4, 5, 6, 7, 8, 10].map(n => (
             <option key={n} value={n}>{n} vote{n !== 1 ? 's' : ''}</option>

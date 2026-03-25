@@ -20,9 +20,7 @@ export function CardForm({
   const [value, setValue] = useState(initialValue);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  useEffect(() => {
-    textareaRef.current?.focus();
-  }, []);
+  useEffect(() => { textareaRef.current?.focus(); }, []);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -32,13 +30,8 @@ export function CardForm({
   }
 
   function handleKeyDown(e: React.KeyboardEvent) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSubmit(e as unknown as React.FormEvent);
-    }
-    if (e.key === 'Escape' && onCancel) {
-      onCancel();
-    }
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSubmit(e as unknown as React.FormEvent); }
+    if (e.key === 'Escape' && onCancel) onCancel();
   }
 
   return (
@@ -51,24 +44,26 @@ export function CardForm({
         placeholder={placeholder}
         rows={3}
         maxLength={500}
-        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        className="w-full px-3 py-2 text-sm rounded-xl outline-none resize-none transition-all"
+        style={{ border: '1.5px solid var(--border-input)', background: 'var(--surface-dim)', color: 'var(--text)' }}
+        onFocus={e => { e.target.style.borderColor = 'var(--border-input-focus)'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)'; }}
+        onBlur={e => { e.target.style.borderColor = 'var(--border-input)'; e.target.style.boxShadow = 'none'; }}
       />
       <div className="flex gap-2 mt-1 justify-end">
         {onCancel && (
-          <button
-            type="button"
-            onClick={onCancel}
-            className="text-sm text-gray-500 hover:text-gray-700 px-2 py-1"
-          >
-            Cancel
+          <button type="button" onClick={onCancel}
+            className="text-sm px-2 py-1 rounded-lg transition-colors"
+            style={{ color: 'var(--text-muted)' }}>
+            ✕ Cancel
           </button>
         )}
         <button
           type="submit"
           disabled={!value.trim()}
-          className="text-sm bg-indigo-600 text-white px-3 py-1 rounded-lg hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="text-sm text-white px-3 py-1 rounded-lg font-semibold disabled:opacity-40 disabled:cursor-not-allowed transition-all hover:-translate-y-px"
+          style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', boxShadow: '0 3px 10px rgba(99,102,241,0.3)' }}
         >
-          {submitLabel}
+          ✓ {submitLabel}
         </button>
       </div>
     </form>

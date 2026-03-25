@@ -47,24 +47,21 @@ export function Card({
 
   if (card.isHidden && !card.isOwn) {
     return (
-      <div className={`rounded-xl p-3 bg-white transition-all ${isHighlighted ? 'ring-2 ring-yellow-400' : ''}`}
-        style={{ border: '1px solid rgba(99,102,241,0.1)', borderLeft: '3px solid #c7d2fe', boxShadow: '0 1px 4px rgba(99,102,241,0.06)' }}>
-        <div className="h-2.5 bg-indigo-100 rounded animate-pulse mb-2 w-3/4" />
-        <div className="h-2.5 bg-indigo-100 rounded animate-pulse w-1/2" />
-        <p className="text-xs text-gray-400 mt-2 italic">Hidden until reveal</p>
+      <div className={`rounded-xl p-3 transition-all ${isHighlighted ? 'ring-2 ring-yellow-400' : ''}`}
+        style={{ background: 'var(--surface-solid)', border: '1px solid var(--border)', borderLeft: '3px solid var(--border-input)', boxShadow: 'var(--card-shadow)' }}>
+        <div className="h-2.5 rounded animate-pulse mb-2 w-3/4" style={{ background: 'var(--border-input)' }} />
+        <div className="h-2.5 rounded animate-pulse w-1/2" style={{ background: 'var(--border-input)' }} />
+        <p className="text-xs mt-2 italic" style={{ color: 'var(--text-subtle)' }}>Hidden until reveal</p>
       </div>
     );
   }
 
   if (editing && canEdit) {
     return (
-      <div className="rounded-xl p-3 bg-white" style={{ border: '1.5px solid #6366f1', boxShadow: '0 0 0 3px rgba(99,102,241,0.12)' }}>
+      <div className="rounded-xl p-3" style={{ background: 'var(--surface-solid)', border: '1.5px solid var(--border-input-focus)', boxShadow: '0 0 0 3px rgba(99,102,241,0.12)' }}>
         <CardForm
           initialValue={card.content}
-          onSubmit={(content) => {
-            onEdit!(card.id, content);
-            setEditing(false);
-          }}
+          onSubmit={(content) => { onEdit!(card.id, content); setEditing(false); }}
           onCancel={() => setEditing(false)}
           submitLabel="Save"
         />
@@ -74,23 +71,18 @@ export function Card({
 
   return (
     <div
-      className={`rounded-xl p-3 bg-white transition-all cursor-default group ${
-        isHighlighted
-          ? 'scale-[1.02] ring-2 ring-yellow-400'
-          : 'hover:-translate-y-0.5'
-      }`}
+      className={`rounded-xl p-3 transition-all ${isHighlighted ? 'scale-[1.02] ring-2 ring-yellow-400' : 'hover:-translate-y-0.5'}`}
       style={{
-        border: '1px solid rgba(99,102,241,0.1)',
+        background: 'var(--surface-solid)',
+        border: '1px solid var(--border)',
         borderLeft: '3px solid #a5b4fc',
-        boxShadow: isHighlighted
-          ? '0 8px 24px rgba(99,102,241,0.18)'
-          : '0 1px 4px rgba(99,102,241,0.06), 0 2px 8px rgba(0,0,0,0.03)',
+        boxShadow: isHighlighted ? '0 8px 24px rgba(99,102,241,0.18)' : 'var(--card-shadow)',
       }}
     >
-      <p className="text-[13.5px] text-gray-800 whitespace-pre-wrap break-words leading-relaxed">{card.content}</p>
+      <p className="text-[13.5px] whitespace-pre-wrap break-words leading-relaxed" style={{ color: 'var(--text)' }}>{card.content}</p>
 
       <div className="flex items-center justify-between mt-2">
-        <span className="text-xs text-gray-400">{card.authorName}</span>
+        <span className="text-xs" style={{ color: 'var(--text-subtle)' }}>{card.authorName}</span>
 
         <div className="flex items-center gap-1">
           {showVote && (
@@ -111,19 +103,21 @@ export function Card({
           {canEdit && (
             <button
               onClick={() => setEditing(true)}
-              className="text-xs text-gray-300 hover:text-gray-500 p-1 rounded transition-colors"
+              className="text-xs p-1 rounded transition-colors hover:bg-indigo-50"
+              style={{ color: 'var(--text-subtle)' }}
               title="Edit card"
             >
-              ✏️
+              ✏
             </button>
           )}
           {canDelete && (
             <button
               onClick={() => onDelete!(card.id)}
-              className="text-xs text-gray-300 hover:text-red-400 p-1 rounded transition-colors"
+              className="text-sm font-bold p-1 rounded transition-colors hover:bg-red-50 hover:text-red-400"
+              style={{ color: 'var(--text-subtle)' }}
               title="Delete card"
             >
-              🗑️
+              ×
             </button>
           )}
         </div>

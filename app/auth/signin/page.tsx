@@ -47,7 +47,7 @@ function SignInContent() {
 
   return (
     <div className="p-6 flex flex-col gap-3"
-      style={{ background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(20px)', borderRadius: '24px', border: '1px solid rgba(99,102,241,0.1)', boxShadow: '0 8px 32px rgba(99,102,241,0.12), 0 2px 8px rgba(0,0,0,0.04)' }}>
+      style={{ background: 'var(--surface)', backdropFilter: 'blur(20px)', borderRadius: '24px', border: '1px solid var(--border)', boxShadow: 'var(--panel-shadow)' }}>
       {/* SSO buttons */}
       {ssoProviders.map(provider => (
         <button
@@ -114,8 +114,8 @@ export default function SignInPage() {
             style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', boxShadow: '0 8px 24px rgba(99,102,241,0.4)' }}>
             R
           </div>
-          <h1 className="text-2xl font-extrabold text-gray-900 mb-1">Welcome to RWM</h1>
-          <p className="text-sm text-gray-400">Sign in to continue</p>
+          <h1 className="text-2xl font-extrabold mb-1" style={{ color: 'var(--text)' }}>Welcome to RWM</h1>
+          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Sign in to continue</p>
         </div>
         <Suspense fallback={<div className="bg-white rounded-2xl shadow-lg p-6 text-center text-sm text-gray-400">Loading…</div>}>
           <SignInContent />

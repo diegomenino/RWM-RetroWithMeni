@@ -47,7 +47,7 @@ export function Column({
 
   return (
     <div className="flex flex-col overflow-hidden min-w-0"
-      style={{ borderRadius: '20px', border: '1px solid rgba(99,102,241,0.12)', boxShadow: '0 2px 16px rgba(99,102,241,0.08), 0 1px 4px rgba(0,0,0,0.04)', background: 'white' }}>
+      style={{ borderRadius: '20px', border: '1px solid var(--border)', boxShadow: 'var(--panel-shadow)', background: 'var(--surface-solid)' }}>
       <div className={`${column.header} px-4 py-3 flex items-center justify-between`}>
         <span className="font-bold text-[13px] text-white tracking-[0.05px]">
           {column.emoji} {column.label}
@@ -57,7 +57,7 @@ export function Column({
         </span>
       </div>
 
-      <div className="flex-1 p-3 space-y-2 overflow-y-auto bg-gray-50/50" style={{ minHeight: '200px', maxHeight: '60vh' }}>
+      <div className="flex-1 p-3 space-y-2 overflow-y-auto" style={{ minHeight: '200px', maxHeight: '60vh', background: 'var(--surface-col)' }}>
         {sortedCards.map(card => (
           <Card
             key={card.id}
@@ -74,7 +74,7 @@ export function Column({
 
         {phase === 'write' && (
           showForm ? (
-            <div className="bg-white rounded-xl p-2" style={{ border: '1.5px solid #e0e7ff' }}>
+            <div className="rounded-xl p-2" style={{ background: 'var(--surface-solid)', border: '1.5px solid var(--border-input)' }}>
               <CardForm
                 onSubmit={(content) => {
                   onAddCard(column.id, content);

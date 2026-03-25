@@ -300,25 +300,25 @@ function showToast() {
     <div className="flex flex-col h-screen">
       {/* Header */}
       <header className="px-4 py-3 flex flex-col gap-2 relative z-10"
-        style={{ background: 'rgba(255,255,255,0.88)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(99,102,241,0.1)', boxShadow: '0 1px 24px rgba(99,102,241,0.07)' }}>
+        style={{ background: 'var(--surface)', backdropFilter: 'blur(20px)', borderBottom: '1px solid var(--border)', boxShadow: 'var(--header-shadow)' }}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-[10px] flex items-center justify-center text-white text-sm font-bold"
               style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', boxShadow: '0 4px 14px rgba(99,102,241,0.4)' }}>
               R
             </div>
-            <h2 className="text-sm font-semibold text-gray-800 truncate max-w-xs">{state.session.name}</h2>
+            <h2 className="text-sm font-semibold truncate max-w-xs" style={{ color: 'var(--text)' }}>{state.session.name}</h2>
           </div>
           <div className="flex items-center gap-2">
             <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400' : 'bg-red-400'}`} />
-            <span className="text-xs text-gray-400">{isConnected ? 'Connected' : 'Disconnected'}</span>
+            <span className="text-xs" style={{ color: 'var(--text-subtle)' }}>{isConnected ? 'Connected' : 'Disconnected'}</span>
             <button
               onClick={() => { setNameInput(displayName); setShowNameModal(true); }}
               className="text-xs px-3 py-1.5 rounded-[10px] font-medium transition-all hover:-translate-y-px"
-              style={{ background: 'white', border: '1.5px solid #e0e7ff', color: '#374151' }}
+              style={{ background: 'var(--surface-solid)', border: '1.5px solid var(--border-input)', color: 'var(--text-secondary)' }}
               title="Change your name"
             >
-              👤 {displayName || 'Set name'}
+              👥 {displayName || 'Set name'}
             </button>
             <button
               onClick={handleShareUrl}
@@ -357,8 +357,8 @@ function showToast() {
         {state.session.phase === 'done' ? (
           <div className="flex flex-col items-center justify-center h-full gap-4">
             <div className="text-5xl">🎉</div>
-            <h2 className="text-2xl font-bold text-gray-700">Retrospective Complete!</h2>
-            <p className="text-gray-500">Great work, team.</p>
+            <h2 className="text-2xl font-bold" style={{ color: 'var(--text)' }}>Retrospective Complete!</h2>
+            <p style={{ color: 'var(--text-muted)' }}>Great work, team.</p>
             {isFacilitator && facilitatorToken && (
               <button
                 onClick={() => handleExport(facilitatorToken)}
@@ -410,10 +410,10 @@ function showToast() {
       {/* Name modal */}
       {showNameModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50"
-          style={{ background: 'rgba(79,70,229,0.12)', backdropFilter: 'blur(10px)' }}>
-          <div className="bg-white p-6 w-80"
-            style={{ borderRadius: '24px', boxShadow: '0 32px 80px rgba(99,102,241,0.18), 0 8px 24px rgba(0,0,0,0.08)' }}>
-            <h3 className="text-[17px] font-extrabold mb-4 text-gray-900">Set your display name</h3>
+          style={{ background: 'var(--modal-overlay)', backdropFilter: 'blur(10px)' }}>
+          <div className="p-6 w-80"
+            style={{ background: 'var(--surface-solid)', borderRadius: '24px', boxShadow: 'var(--modal-shadow)', border: '1px solid var(--border)' }}>
+            <h3 className="text-[17px] font-extrabold mb-4" style={{ color: 'var(--text)' }}>Set your display name</h3>
             <input
               type="text"
               value={nameInput}
@@ -424,15 +424,16 @@ function showToast() {
               }}
               maxLength={30}
               className="w-full px-3 py-2.5 mb-4 text-sm rounded-xl outline-none transition-all"
-              style={{ border: '1.5px solid #e0e7ff', background: '#fafbff' }}
-              onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.background = 'white'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)'; }}
-              onBlur={e => { e.target.style.borderColor = '#e0e7ff'; e.target.style.background = '#fafbff'; e.target.style.boxShadow = 'none'; }}
+              style={{ border: '1.5px solid var(--border-input)', background: 'var(--surface-dim)', color: 'var(--text)' }}
+              onFocus={e => { e.target.style.borderColor = 'var(--border-input-focus)'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)'; }}
+              onBlur={e => { e.target.style.borderColor = 'var(--border-input)'; e.target.style.boxShadow = 'none'; }}
               autoFocus
             />
             <div className="flex gap-2 justify-end">
               <button onClick={() => setShowNameModal(false)}
-                className="text-sm text-gray-500 px-3 py-1.5 rounded-xl hover:bg-gray-50 transition-colors">
-                Cancel
+                className="text-sm px-3 py-1.5 rounded-xl transition-colors"
+                style={{ color: 'var(--text-muted)' }}>
+                ✕ Cancel
               </button>
               <button
                 onClick={() => { setDisplayName(nameInput); setShowNameModal(false); }}
@@ -440,7 +441,7 @@ function showToast() {
                 className="text-sm text-white px-4 py-1.5 rounded-xl font-semibold disabled:opacity-50 transition-all hover:-translate-y-px"
                 style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', boxShadow: '0 4px 14px rgba(99,102,241,0.38)' }}
               >
-                Save
+                ✓ Save
               </button>
             </div>
           </div>
