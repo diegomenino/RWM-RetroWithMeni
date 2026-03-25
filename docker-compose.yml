@@ -33,3 +33,4 @@ services:
 volumes:
   rwm-data:
     driver: local
+    name: rwm-data
