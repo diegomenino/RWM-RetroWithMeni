@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 import { Card, CardData } from './Card';
 import { CardForm } from './CardForm';
 
@@ -38,6 +39,7 @@ export function Column({
   onVote,
   onUnvote,
 }: ColumnProps) {
+  const { t } = useLanguage();
   const [showForm, setShowForm] = useState(false);
 
   // Sort by votes desc during discuss phase
@@ -81,7 +83,7 @@ export function Column({
                   setShowForm(false);
                 }}
                 onCancel={() => setShowForm(false)}
-                placeholder={`Add to ${column.label}…`}
+                placeholder={t('board.addTo', { column: column.label })}
               />
             </div>
           ) : (
@@ -89,7 +91,7 @@ export function Column({
               onClick={() => setShowForm(true)}
               className="w-full text-[13px] font-medium text-gray-400 hover:text-indigo-500 border-2 border-dashed border-indigo-100 hover:border-indigo-300 hover:bg-indigo-50/50 rounded-xl py-3 transition-all"
             >
-              + Add card
+              + {t('board.addCard')}
             </button>
           )
         )}

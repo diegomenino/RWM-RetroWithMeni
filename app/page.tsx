@@ -1,7 +1,11 @@
+'use client';
+
 import { CreateSessionForm } from '@/components/session/CreateSessionForm';
 import { LookupSessionForm } from '@/components/session/LookupSessionForm';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 
 export default function HomePage() {
+  const { t } = useLanguage();
   return (
     <main className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-lg">
@@ -11,21 +15,21 @@ export default function HomePage() {
             R
           </div>
           <h1 className="text-2xl font-extrabold text-gray-900 mb-1">RWM</h1>
-          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Real-time collaborative retrospectives</p>
+          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{t('home.subtitle')}</p>
         </div>
 
         <div className="p-6 relative z-10" style={{ background: 'var(--surface)', backdropFilter: 'blur(20px)', borderRadius: '24px', border: '1px solid var(--border)', boxShadow: 'var(--panel-shadow)' }}>
-          <h2 className="text-[17px] font-extrabold mb-4" style={{ color: 'var(--text)' }}>Create a New Session</h2>
+          <h2 className="text-[17px] font-extrabold mb-4" style={{ color: 'var(--text)' }}>{t('home.createSession')}</h2>
           <CreateSessionForm />
         </div>
 
         <div className="p-5 mt-4 relative z-10" style={{ background: 'var(--surface)', backdropFilter: 'blur(20px)', borderRadius: '20px', border: '1px solid var(--border)', boxShadow: 'var(--panel-shadow)' }}>
-          <h2 className="text-sm font-bold mb-3" style={{ color: 'var(--text-secondary)' }}>View a Previous Session</h2>
+          <h2 className="text-sm font-bold mb-3" style={{ color: 'var(--text-secondary)' }}>{t('home.viewSession')}</h2>
           <LookupSessionForm />
         </div>
 
         <p className="text-center text-sm mt-4" style={{ color: 'var(--text-subtle)' }}>
-          Have a session link? Just open it to join automatically.
+          {t('home.sessionLinkHint')}
         </p>
       </div>
     </main>

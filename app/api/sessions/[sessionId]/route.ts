@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSession, updateSession, validateFacilitator } from '@/lib/db-queries';
+import { getSession, updateSession, validateFacilitator, getCardsBySession, getVotesBySession } from '@/lib/db-queries';
 import { getColumns } from '@/lib/retro-formats';
 
 export async function GET(
@@ -12,15 +12,31 @@ export async function GET(
     return NextResponse.json({ error: 'Session not found' }, { status: 404 });
   }
 
+  const columns = getColumns(session.format);
+  const rawCards = getCardsBySession(sessionId) as any[];
+  const votes = getVotesBySession(sessionId) as any[];
+
+  const cards = rawCards.map(card => ({
+    id: card.id,
+    columnId: card.column_id,
+    authorName: card.author_name,
+    content: card.content,
+    isHidden: card.is_hidden === 1,
+    voteCount: votes.filter((v: any) => v.card_id === card.id).length,
+  }));
+
   return NextResponse.json({
-    id: session.id,
-    name: session.name,
-    format: session.format,
-    phase: session.phase,
-    maxVotes: session.max_votes,
-    timerEndsAt: session.timer_ends_at,
-    createdAt: session.created_at,
-    columns: getColumns(session.format),
+    session: {
+      id: session.id,
+      name: session.name,
+      format: session.format,
+      phase: session.phase,
+      maxVotes: session.max_votes,
+      timerEndsAt: session.timer_ends_at,
+      createdAt: session.created_at,
+    },
+    columns,
+    cards,
   });
 }
 

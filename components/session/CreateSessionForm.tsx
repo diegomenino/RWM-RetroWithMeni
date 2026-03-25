@@ -3,11 +3,13 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { RETRO_FORMATS } from '@/lib/retro-formats';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 
 const FORMAT_IDS = Object.keys(RETRO_FORMATS) as Array<keyof typeof RETRO_FORMATS>;
 
 export function CreateSessionForm() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [name, setName] = useState('');
   const [format, setFormat] = useState('went-well-improve');
   const [maxVotes, setMaxVotes] = useState(5);
@@ -28,7 +30,7 @@ export function CreateSessionForm() {
 
       if (!res.ok) {
         const data = await res.json();
-        setError(data.error || 'Failed to create session');
+        setError(data.error || t('form.failedToCreate'));
         return;
       }
 
@@ -36,7 +38,7 @@ export function CreateSessionForm() {
       localStorage.setItem(`facilitator_${sessionId}`, facilitatorToken);
       router.push(`/session/${sessionId}`);
     } catch {
-      setError('Network error. Please try again.');
+      setError(t('form.networkError'));
     } finally {
       setLoading(false);
     }
@@ -46,13 +48,13 @@ export function CreateSessionForm() {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1.5">
-          Session Name
+          {t('form.sessionName')}
         </label>
         <input
           type="text"
           value={name}
           onChange={e => setName(e.target.value)}
-          placeholder="e.g. Sprint 42 Retrospective"
+          placeholder={t('form.sessionNamePlaceholder')}
           required
           maxLength={100}
           className="w-full px-3 py-2.5 text-sm rounded-xl outline-none transition-all"
@@ -64,7 +66,7 @@ export function CreateSessionForm() {
 
       <div>
         <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1.5">
-          Format
+          {t('form.format')}
         </label>
         <div className="grid grid-cols-1 gap-2">
           {FORMAT_IDS.map(id => {
@@ -89,8 +91,8 @@ export function CreateSessionForm() {
                   className="mt-0.5 accent-indigo-600"
                 />
                 <div>
-                  <div className="font-semibold text-sm" style={{ color: 'var(--text)' }}>{fmt.label}</div>
-                  <div className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{fmt.description}</div>
+                  <div className="font-semibold text-sm" style={{ color: 'var(--text)' }}>{t(`formats.${id}.label`)}</div>
+                  <div className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{t(`formats.${id}.description`)}</div>
                   <div className="flex flex-wrap gap-1 mt-1.5">
                     {fmt.columns.map(col => (
                       <span
@@ -110,7 +112,7 @@ export function CreateSessionForm() {
 
       <div>
         <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1.5">
-          Votes per person
+          {t('form.votesPerPerson')}
         </label>
         <select
           value={maxVotes}
@@ -121,7 +123,7 @@ export function CreateSessionForm() {
           onBlur={e => { e.target.style.borderColor = 'var(--border-input)'; e.target.style.boxShadow = 'none'; }}
         >
           {[1, 2, 3, 4, 5, 6, 7, 8, 10].map(n => (
-            <option key={n} value={n}>{n} vote{n !== 1 ? 's' : ''}</option>
+            <option key={n} value={n}>{n} {n !== 1 ? t('form.votes') : t('form.vote')}</option>
           ))}
         </select>
       </div>
@@ -136,7 +138,7 @@ export function CreateSessionForm() {
         className="w-full text-white py-2.5 px-4 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:-translate-y-px"
         style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed, #9333ea)', boxShadow: '0 4px 14px rgba(99,102,241,0.38)' }}
       >
-        {loading ? 'Creating…' : 'Create Session'}
+        {loading ? t('form.creating') : t('form.createSession')}
       </button>
     </form>
   );

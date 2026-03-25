@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 
 const DURATION_OPTIONS = [5, 10, 15] as const;
 
@@ -11,6 +12,7 @@ interface CountdownTimerProps {
 }
 
 export function CountdownTimer({ sessionId, timerEndsAt, onTimerSet }: CountdownTimerProps) {
+  const { t } = useLanguage();
   const [selectedMinutes, setSelectedMinutes] = useState<number>(5);
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -105,7 +107,7 @@ export function CountdownTimer({ sessionId, timerEndsAt, onTimerSet }: Countdown
               : 'bg-indigo-600 hover:bg-indigo-700 text-white'
           }`}
         >
-          {isRunning ? 'Stop' : isDone ? 'Restart' : 'Start'}
+          {isRunning ? t('timer.stop') : isDone ? t('timer.restart') : t('timer.start')}
         </button>
       </div>
     </div>

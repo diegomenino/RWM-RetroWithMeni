@@ -2,6 +2,7 @@
 
 import { useEffect, useReducer, useState } from 'react';
 import { useSocket } from '@/components/providers/SocketProvider';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 import { Column } from './Column';
 import { CardData } from './Card';
 import { PhaseControls } from '@/components/session/PhaseControls';
@@ -127,6 +128,7 @@ interface RetroBoardProps {
 
 export function RetroBoard({ sessionId, initialSession, initialColumns }: RetroBoardProps) {
   const { socket, isConnected, participantId, isFacilitator, facilitatorToken, displayName, setDisplayName } = useSocket();
+  const { t } = useLanguage();
   const [nameInput, setNameInput] = useState('');
   const [showNameModal, setShowNameModal] = useState(false);
   const [shareToast, setShareToast] = useState(false);
@@ -311,24 +313,24 @@ function showToast() {
           </div>
           <div className="flex items-center gap-2">
             <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400' : 'bg-red-400'}`} />
-            <span className="text-xs" style={{ color: 'var(--text-subtle)' }}>{isConnected ? 'Connected' : 'Disconnected'}</span>
+            <span className="text-xs" style={{ color: 'var(--text-subtle)' }}>{isConnected ? t('board.connected') : t('board.disconnected')}</span>
             <button
               onClick={() => { setNameInput(displayName); setShowNameModal(true); }}
               className="text-xs px-3 py-1.5 rounded-[10px] font-medium transition-all hover:-translate-y-px"
               style={{ background: 'var(--surface-solid)', border: '1.5px solid var(--border-input)', color: 'var(--text-secondary)' }}
-              title="Change your name"
+              title={t('board.changeName')}
             >
-              👥 {displayName || 'Set name'}
+              👥 {displayName || t('board.setName')}
             </button>
             <button
               onClick={handleShareUrl}
               className="text-xs px-3 py-1.5 rounded-[10px] font-semibold text-white transition-all hover:-translate-y-px relative"
               style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', boxShadow: '0 4px 14px rgba(99,102,241,0.38)' }}
             >
-              🔗 Share
+              🔗 {t('board.share')}
               {shareToast && (
                 <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs bg-gray-800 text-white px-2 py-1 rounded-lg whitespace-nowrap">
-                  Copied!
+                  {t('board.copied')}
                 </span>
               )}
             </button>
@@ -357,15 +359,15 @@ function showToast() {
         {state.session.phase === 'done' ? (
           <div className="flex flex-col items-center justify-center h-full gap-4">
             <div className="text-5xl">🎉</div>
-            <h2 className="text-2xl font-bold" style={{ color: 'var(--text)' }}>Retrospective Complete!</h2>
-            <p style={{ color: 'var(--text-muted)' }}>Great work, team.</p>
+            <h2 className="text-2xl font-bold" style={{ color: 'var(--text)' }}>{t('board.retroComplete')}</h2>
+            <p style={{ color: 'var(--text-muted)' }}>{t('board.greatWork')}</p>
             {isFacilitator && facilitatorToken && (
               <button
                 onClick={() => handleExport(facilitatorToken)}
                 className="text-white px-6 py-2.5 rounded-xl font-semibold transition-all hover:-translate-y-px"
                 style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', boxShadow: '0 4px 14px rgba(99,102,241,0.38)' }}
               >
-                Download Export
+                {t('board.downloadExport')}
               </button>
             )}
           </div>
@@ -396,7 +398,7 @@ function showToast() {
       {/* Discuss: click on cards to highlight — hint bar */}
       {state.session.phase === 'discuss' && isFacilitator && (
         <div className="bg-yellow-50 border-t border-yellow-200 text-yellow-700 text-xs text-center py-2">
-          Discussion mode: click a card (below) to spotlight it for your team
+          {t('board.discussionHint')}
         </div>
       )}
 
@@ -413,7 +415,7 @@ function showToast() {
           style={{ background: 'var(--modal-overlay)', backdropFilter: 'blur(10px)' }}>
           <div className="p-6 w-80"
             style={{ background: 'var(--surface-solid)', borderRadius: '24px', boxShadow: 'var(--modal-shadow)', border: '1px solid var(--border)' }}>
-            <h3 className="text-[17px] font-extrabold mb-4" style={{ color: 'var(--text)' }}>Set your display name</h3>
+            <h3 className="text-[17px] font-extrabold mb-4" style={{ color: 'var(--text)' }}>{t('board.setDisplayName')}</h3>
             <input
               type="text"
               value={nameInput}
@@ -433,7 +435,7 @@ function showToast() {
               <button onClick={() => setShowNameModal(false)}
                 className="text-sm px-3 py-1.5 rounded-xl transition-colors"
                 style={{ color: 'var(--text-muted)' }}>
-                ✕ Cancel
+                ✕ {t('board.cancel')}
               </button>
               <button
                 onClick={() => { setDisplayName(nameInput); setShowNameModal(false); }}
@@ -441,7 +443,7 @@ function showToast() {
                 className="text-sm text-white px-4 py-1.5 rounded-xl font-semibold disabled:opacity-50 transition-all hover:-translate-y-px"
                 style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', boxShadow: '0 4px 14px rgba(99,102,241,0.38)' }}
               >
-                ✓ Save
+                ✓ {t('board.save')}
               </button>
             </div>
           </div>

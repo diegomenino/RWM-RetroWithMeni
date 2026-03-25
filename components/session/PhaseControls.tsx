@@ -1,22 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 
 const PHASES = ['write', 'vote', 'discuss', 'done'] as const;
 type Phase = typeof PHASES[number];
-
-const PHASE_LABELS: Record<Phase, string> = {
-  write: '✍️ Write',
-  vote: '🗳️ Vote',
-  discuss: '💬 Discuss',
-  done: '✅ Done',
-};
-
-const NEXT_PHASE_LABEL: Record<string, string> = {
-  write: 'Reveal & Start Voting',
-  vote: 'Start Discussion',
-  discuss: 'Finish Session',
-};
 
 interface PhaseControlsProps {
   sessionId: string;
@@ -45,7 +33,21 @@ export function PhaseControls({
   onClearCards,
   onExport,
 }: PhaseControlsProps) {
+  const { t } = useLanguage();
   const [confirmClear, setConfirmClear] = useState(false);
+
+  const PHASE_LABELS: Record<Phase, string> = {
+    write: `✍️ ${t('phase.write')}`,
+    vote: `🗳️ ${t('phase.vote')}`,
+    discuss: `💬 ${t('phase.discuss')}`,
+    done: `✅ ${t('phase.done')}`,
+  };
+
+  const NEXT_PHASE_LABEL: Record<string, string> = {
+    write: t('phase.revealAndVote'),
+    vote: t('phase.startDiscussion'),
+    discuss: t('phase.finishSession'),
+  };
 
   const currentPhaseIdx = PHASES.indexOf(phase as Phase);
   const nextPhase = PHASES[currentPhaseIdx + 1] as Phase | undefined;
@@ -80,7 +82,7 @@ export function PhaseControls({
       {/* Votes remaining badge (non-facilitator) */}
       {!isFacilitator && phase === 'vote' && (
         <span className="text-xs bg-amber-100 text-amber-700 border border-amber-300 px-2 py-1 rounded-full">
-          🗳️ {votesRemaining} vote{votesRemaining !== 1 ? 's' : ''} remaining
+          🗳️ {votesRemaining} {votesRemaining !== 1 ? t('board.votesRemaining') : t('board.voteRemaining')}
         </span>
       )}
 
@@ -94,7 +96,7 @@ export function PhaseControls({
               className="text-xs px-3 py-1.5 rounded-[10px] font-semibold transition-all hover:-translate-y-px"
               style={{ border: '1.5px solid #86efac', color: '#16a34a', background: 'white' }}
             >
-              Export JSON
+              {t('phase.exportJson')}
             </button>
           )}
 
@@ -107,14 +109,14 @@ export function PhaseControls({
                   className="text-xs text-white px-3 py-1.5 rounded-[10px] font-semibold transition-all"
                   style={{ background: 'linear-gradient(135deg, #ef4444, #dc2626)', boxShadow: '0 3px 10px rgba(239,68,68,0.3)' }}
                 >
-                  Confirm clear
+                  {t('phase.confirmClear')}
                 </button>
                 <button
                   onClick={() => setConfirmClear(false)}
                   className="text-xs px-3 py-1.5 rounded-[10px] font-medium transition-all"
                   style={{ border: '1.5px solid #e0e7ff', color: '#6b7280', background: 'white' }}
                 >
-                  Cancel
+                  {t('phase.cancel')}
                 </button>
               </div>
             ) : (
@@ -123,7 +125,7 @@ export function PhaseControls({
                 className="text-xs px-3 py-1.5 rounded-[10px] font-semibold transition-all hover:-translate-y-px"
                 style={{ border: '1.5px solid #fca5a5', color: '#ef4444', background: 'white' }}
               >
-                Clear all cards
+                {t('phase.clearCards')}
               </button>
             )
           )}

@@ -1,36 +1,75 @@
-import { notFound } from 'next/navigation';
-import { getSession } from '@/lib/db-queries';
-import { getColumns } from '@/lib/retro-formats';
-import { getCardsBySession, getVotesBySession } from '@/lib/db-queries';
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 import Link from 'next/link';
 
-interface PageProps {
-  params: Promise<{ sessionId: string }>;
+interface CardData {
+  id: string;
+  columnId: string;
+  authorName: string;
+  content: string;
+  isHidden: boolean;
+  voteCount: number;
 }
 
-export default async function SessionViewPage({ params }: PageProps) {
-  const { sessionId } = await params;
-  const session = getSession(sessionId);
-  if (!session) notFound();
+interface SessionData {
+  id: string;
+  name: string;
+  format: string;
+  phase: string;
+}
 
-  const columns = getColumns(session.format);
-  const rawCards = getCardsBySession(sessionId) as any[];
-  const votes = getVotesBySession(sessionId) as any[];
+interface ColumnDef {
+  id: string;
+  label: string;
+  emoji: string;
+  color: string;
+  border: string;
+  header: string;
+}
 
-  const cards = rawCards.map(card => ({
-    id: card.id,
-    columnId: card.column_id,
-    authorName: card.author_name,
-    content: card.content,
-    isHidden: card.is_hidden === 1,
-    voteCount: votes.filter((v: any) => v.card_id === card.id).length,
-  }));
+export default function SessionViewPage() {
+  const { t } = useLanguage();
+  const params = useParams();
+  const sessionId = params.sessionId as string;
+
+  const [loading, setLoading] = useState(true);
+  const [session, setSession] = useState<SessionData | null>(null);
+  const [columns, setColumns] = useState<ColumnDef[]>([]);
+  const [cards, setCards] = useState<CardData[]>([]);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const res = await fetch(`/api/sessions/${sessionId}`);
+        if (!res.ok) {
+          setLoading(false);
+          return;
+        }
+        const data = await res.json();
+        setSession(data.session);
+        setColumns(data.columns);
+        setCards(data.cards || []);
+      } catch {
+        console.error('Failed to load session');
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, [sessionId]);
+
+  if (loading || !session) {
+    return <main className="min-h-screen flex items-center justify-center">{t('auth.loading')}</main>;
+  }
 
   const phaseLabel: Record<string, string> = {
-    write: 'Write',
-    vote: 'Vote',
-    discuss: 'Discuss',
-    done: 'Done',
+    write: t('phase.write'),
+    vote: t('phase.vote'),
+    discuss: t('phase.discuss'),
+    done: t('phase.done'),
   };
 
   return (
@@ -40,19 +79,19 @@ export default async function SessionViewPage({ params }: PageProps) {
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <Link href="/" className="text-sm text-indigo-500 hover:underline mb-1 block">← Home</Link>
+            <Link href="/" className="text-sm text-indigo-500 hover:underline mb-1 block">← {t('view.back')}</Link>
             <h1 className="text-2xl font-bold text-gray-800">{session.name}</h1>
             <p className="text-sm text-gray-400 mt-0.5">
-              ID: <span className="font-mono">{session.id}</span>
-              {' · '}Phase: <span className="font-medium">{phaseLabel[session.phase] ?? session.phase}</span>
-              {' · '}Read-only view
+              {t('view.id')}: <span className="font-mono">{session.id}</span>
+              {' · '}{t('view.phase')}: <span className="font-medium">{phaseLabel[session.phase] ?? session.phase}</span>
+              {' · '}{t('view.readOnly')}
             </p>
           </div>
         </div>
 
         {/* Columns */}
         <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))` }}>
-          {columns.map((col: any) => {
+          {columns.map((col: ColumnDef) => {
             const colCards = cards
               .filter(c => c.columnId === col.id && !c.isHidden)
               .sort((a, b) => b.voteCount - a.voteCount);
@@ -63,12 +102,12 @@ export default async function SessionViewPage({ params }: PageProps) {
                   <span className="font-semibold text-white text-sm">
                     {col.emoji} {col.label}
                   </span>
-                  <span className="text-white/80 text-xs">{colCards.length} card{colCards.length !== 1 ? 's' : ''}</span>
+                  <span className="text-white/80 text-xs">{colCards.length} {colCards.length !== 1 ? t('view.cards') : t('view.card')}</span>
                 </div>
 
                 <div className={`${col.color} p-3 space-y-2 min-h-[120px]`}>
                   {colCards.length === 0 && (
-                    <p className="text-xs text-gray-400 text-center pt-4">No cards</p>
+                    <p className="text-xs text-gray-400 text-center pt-4">{t('view.noCards')}</p>
                   )}
                   {colCards.map(card => (
                     <div key={card.id} className="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
@@ -91,7 +130,7 @@ export default async function SessionViewPage({ params }: PageProps) {
 
         {session.phase !== 'done' && (
           <p className="text-center text-xs text-gray-400 mt-6">
-            This session is still in progress. Hidden cards are not shown.
+            {t('view.inProgress')}
           </p>
         )}
       </div>

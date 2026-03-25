@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 
 export function LookupSessionForm() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [sessionId, setSessionId] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -17,7 +19,7 @@ export function LookupSessionForm() {
     setError('');
     const res = await fetch(`/api/sessions/${id}`);
     if (!res.ok) {
-      setError('Session not found. Check the ID and try again.');
+      setError(t('form.sessionNotFound'));
       setLoading(false);
       return;
     }
@@ -31,7 +33,7 @@ export function LookupSessionForm() {
           type="text"
           value={sessionId}
           onChange={e => setSessionId(e.target.value)}
-          placeholder="Paste session ID…"
+          placeholder={t('form.pasteSessionId')}
           className="flex-1 px-3 py-2.5 text-sm rounded-xl outline-none transition-all"
           style={{ border: '1.5px solid var(--border-input)', background: 'var(--surface-dim)', color: 'var(--text)' }}
           onFocus={e => { e.target.style.borderColor = 'var(--border-input-focus)'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)'; }}
@@ -43,7 +45,7 @@ export function LookupSessionForm() {
           className="text-sm font-semibold px-4 py-2 rounded-xl disabled:opacity-50 transition-all hover:-translate-y-px"
           style={{ border: '1.5px solid var(--border-input)', background: 'var(--surface-solid)', color: 'var(--text-secondary)' }}
         >
-          {loading ? '…' : 'View'}
+          {loading ? '…' : t('form.view')}
         </button>
       </div>
       {error && <p className="text-red-500 text-xs bg-red-50 px-3 py-1.5 rounded-lg">{error}</p>}

@@ -3,6 +3,7 @@
 import { signIn, getProviders } from 'next-auth/react';
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 
 interface Provider {
   id: string;
@@ -17,6 +18,7 @@ const PROVIDER_ICONS: Record<string, string> = {
 const SSO_PROVIDERS = ['google', 'azure-ad'];
 
 function SignInContent() {
+  const { t } = useLanguage();
   const [providers, setProviders] = useState<Record<string, Provider>>({});
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
@@ -38,7 +40,7 @@ function SignInContent() {
     setLoading(true);
     const res = await signIn('email-only', { email, callbackUrl, redirect: false });
     if (res?.error) {
-      setError('Invalid email address.');
+      setError(t('auth.invalidEmail'));
       setLoading(false);
     } else {
       window.location.href = callbackUrl;
@@ -59,7 +61,7 @@ function SignInContent() {
           onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#e0e7ff'; }}
         >
           <span>{PROVIDER_ICONS[provider.id]}</span>
-          Continue with {provider.name}
+          {t('auth.continueWith', { provider: provider.name })}
         </button>
       ))}
 
@@ -67,7 +69,7 @@ function SignInContent() {
       {ssoProviders.length > 0 && hasEmailOnly && (
         <div className="flex items-center gap-3 my-1">
           <div className="flex-1 h-px" style={{ background: '#e0e7ff' }} />
-          <span className="text-xs text-gray-400">or</span>
+          <span className="text-xs text-gray-400">{t('auth.or')}</span>
           <div className="flex-1 h-px" style={{ background: '#e0e7ff' }} />
         </div>
       )}
@@ -77,7 +79,7 @@ function SignInContent() {
         <form onSubmit={handleEmailSubmit} className="flex flex-col gap-3">
           <input
             type="email"
-            placeholder="you@example.com"
+            placeholder={t('auth.emailPlaceholder')}
             value={email}
             onChange={e => setEmail(e.target.value)}
             required
@@ -93,14 +95,28 @@ function SignInContent() {
             className="w-full text-white px-4 py-3 text-sm font-semibold rounded-xl disabled:opacity-50 transition-all hover:-translate-y-px"
             style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed, #9333ea)', boxShadow: '0 4px 14px rgba(99,102,241,0.38)' }}
           >
-            {loading ? 'Signing in…' : 'Continue with Email'}
+            {loading ? t('auth.signingIn') : t('auth.continueWithEmail')}
           </button>
         </form>
       )}
 
       {Object.keys(providers).length === 0 && (
-        <p className="text-center text-sm text-gray-400">Loading…</p>
+        <p className="text-center text-sm text-gray-400">{t('auth.loading')}</p>
       )}
+    </div>
+  );
+}
+
+function SignInHeader() {
+  const { t } = useLanguage();
+  return (
+    <div className="text-center mb-8">
+      <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-2xl font-extrabold mx-auto mb-4"
+        style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', boxShadow: '0 8px 24px rgba(99,102,241,0.4)' }}>
+        R
+      </div>
+      <h1 className="text-2xl font-extrabold mb-1" style={{ color: 'var(--text)' }}>{t('auth.welcome')}</h1>
+      <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{t('auth.signIn')}</p>
     </div>
   );
 }
@@ -109,14 +125,7 @@ export default function SignInPage() {
   return (
     <main className="min-h-screen flex items-center justify-center p-4 relative z-10">
       <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-2xl font-extrabold mx-auto mb-4"
-            style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', boxShadow: '0 8px 24px rgba(99,102,241,0.4)' }}>
-            R
-          </div>
-          <h1 className="text-2xl font-extrabold mb-1" style={{ color: 'var(--text)' }}>Welcome to RWM</h1>
-          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Sign in to continue</p>
-        </div>
+        <SignInHeader />
         <Suspense fallback={<div className="bg-white rounded-2xl shadow-lg p-6 text-center text-sm text-gray-400">Loading…</div>}>
           <SignInContent />
         </Suspense>

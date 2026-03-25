@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 import { VoteButton } from './VoteButton';
 import { CardForm } from './CardForm';
 
@@ -39,6 +40,7 @@ export function Card({
   onVote,
   onUnvote,
 }: CardProps) {
+  const { t } = useLanguage();
   const [editing, setEditing] = useState(false);
 
   const canEdit = card.isOwn && phase === 'write' && onEdit;
@@ -51,7 +53,7 @@ export function Card({
         style={{ background: 'var(--surface-solid)', border: '1px solid var(--border)', borderLeft: '3px solid var(--border-input)', boxShadow: 'var(--card-shadow)' }}>
         <div className="h-2.5 rounded animate-pulse mb-2 w-3/4" style={{ background: 'var(--border-input)' }} />
         <div className="h-2.5 rounded animate-pulse w-1/2" style={{ background: 'var(--border-input)' }} />
-        <p className="text-xs mt-2 italic" style={{ color: 'var(--text-subtle)' }}>Hidden until reveal</p>
+        <p className="text-xs mt-2 italic" style={{ color: 'var(--text-subtle)' }}>{t('board.hiddenUntilReveal')}</p>
       </div>
     );
   }
@@ -63,7 +65,7 @@ export function Card({
           initialValue={card.content}
           onSubmit={(content) => { onEdit!(card.id, content); setEditing(false); }}
           onCancel={() => setEditing(false)}
-          submitLabel="Save"
+          submitLabel={t('board.save')}
         />
       </div>
     );
@@ -105,7 +107,7 @@ export function Card({
               onClick={() => setEditing(true)}
               className="text-xs p-1 rounded transition-colors hover:bg-indigo-50"
               style={{ color: 'var(--text-subtle)' }}
-              title="Edit card"
+              title={t('board.editCard')}
             >
               ✏
             </button>
@@ -115,7 +117,7 @@ export function Card({
               onClick={() => onDelete!(card.id)}
               className="text-sm font-bold p-1 rounded transition-colors hover:bg-red-50 hover:text-red-400"
               style={{ color: 'var(--text-subtle)' }}
-              title="Delete card"
+              title={t('board.deleteCard')}
             >
               ×
             </button>
