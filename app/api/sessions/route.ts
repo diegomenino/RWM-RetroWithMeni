@@ -1,7 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
-import { createSession } from '@/lib/db-queries';
+import { createSession, getAllSessions } from '@/lib/db-queries';
 import { VALID_FORMAT_IDS } from '@/lib/retro-formats';
+
+export async function GET() {
+  try {
+    const sessions = getAllSessions();
+    return NextResponse.json({ sessions });
+  } catch (err) {
+    console.error('GET /api/sessions error:', err);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
 
 export async function POST(req: NextRequest) {
   try {

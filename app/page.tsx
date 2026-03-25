@@ -1,11 +1,14 @@
 'use client';
 
+import { useState } from 'react';
 import { CreateSessionForm } from '@/components/session/CreateSessionForm';
 import { LookupSessionForm } from '@/components/session/LookupSessionForm';
+import { SessionList } from '@/components/session/SessionList';
 import { useLanguage } from '@/components/providers/LanguageProvider';
 
 export default function HomePage() {
   const { t } = useLanguage();
+  const [showSessions, setShowSessions] = useState(false);
   return (
     <main className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-lg">
@@ -31,6 +34,21 @@ export default function HomePage() {
         <p className="text-center text-sm mt-4" style={{ color: 'var(--text-subtle)' }}>
           {t('home.sessionLinkHint')}
         </p>
+
+        <button
+          onClick={() => setShowSessions(s => !s)}
+          className="w-full mt-4 text-sm px-4 py-2.5 rounded-xl font-medium transition-all hover:-translate-y-px"
+          style={{ background: 'var(--surface-solid)', border: '1.5px solid var(--border-input)', color: 'var(--text-secondary)' }}
+        >
+          {t('home.browseSessions')}
+        </button>
+
+        {showSessions && (
+          <div className="p-5 mt-4 relative z-10" style={{ background: 'var(--surface)', backdropFilter: 'blur(20px)', borderRadius: '20px', border: '1px solid var(--border)', boxShadow: 'var(--panel-shadow)' }}>
+            <h2 className="text-sm font-bold mb-3" style={{ color: 'var(--text-secondary)' }}>{t('home.allSessions')}</h2>
+            <SessionList />
+          </div>
+        )}
       </div>
     </main>
   );
