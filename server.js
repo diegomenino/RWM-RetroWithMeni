@@ -3,10 +3,14 @@ const { parse } = require('url');
 const next = require('next');
 const { Server } = require('socket.io');
 const { registerHandlers } = require('./socket/handlers');
+const { version } = require('./package.json');
 
 const dev = process.env.NODE_ENV !== 'production';
 const hostname = process.env.HOSTNAME || 'localhost';
 const port = parseInt(process.env.PORT || '3000', 10);
+
+// Set the app version for the frontend
+process.env.NEXT_PUBLIC_APP_VERSION = version;
 
 const app = next({ dev, hostname, port });
 const handle = app.getRequestHandler();

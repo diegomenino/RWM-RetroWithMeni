@@ -307,7 +307,7 @@ function showToast() {
           <div className="flex items-center gap-3">
             <div className="rounded-[10px] flex items-center justify-center text-white text-sm font-bold px-2 py-1.5"
               style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', boxShadow: '0 4px 14px rgba(99,102,241,0.4)' }}>
-              RWM
+              RWM [v{process.env.NEXT_PUBLIC_APP_VERSION}]
             </div>
             <h2 className="text-sm font-semibold truncate max-w-xs" style={{ color: 'var(--text)' }}>{state.session.name}</h2>
           </div>

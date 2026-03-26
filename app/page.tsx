@@ -17,7 +17,7 @@ export default function HomePage() {
             style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', boxShadow: '0 8px 24px rgba(99,102,241,0.4)' }}>
             RWM
           </div>
-          <h1 className="text-2xl font-extrabold text-gray-900 mb-1">RWM</h1>
+          <h1 className="text-2xl font-extrabold text-gray-900 mb-1">RWM [v{process.env.NEXT_PUBLIC_APP_VERSION}]</h1>
           <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{t('home.subtitle')}</p>
         </div>
 
