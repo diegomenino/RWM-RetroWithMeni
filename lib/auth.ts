@@ -10,6 +10,8 @@ const hasSSOConfigured =
     !!process.env.AZURE_AD_TENANT_ID);
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  trustHost: true,
+  basePath: '/api/auth',
   providers: [
     ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
       ? [
