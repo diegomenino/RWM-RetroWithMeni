@@ -12,7 +12,9 @@ const port = parseInt(process.env.PORT || '3000', 10);
 // Set the app version for the frontend
 process.env.NEXT_PUBLIC_APP_VERSION = version;
 
-const app = next({ dev, hostname, port });
+// Use Webpack instead of Turbopack in dev to avoid Windows junction point issues
+// with native modules listed in serverExternalPackages (e.g. better-sqlite3)
+const app = next({ dev, hostname, port, ...(dev ? { webpack: true } : {}) });
 const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
