@@ -37,7 +37,7 @@ export function SessionList() {
   }, []);
 
   if (loading) {
-    return <div className="text-xs text-center" style={{ color: 'var(--text-muted)' }}>{t('auth.loading')}</div>;
+    return <div className="text-xs text-center" style={{ color: 'var(--text-muted)' }}>{t('common.loading')}</div>;
   }
 
   if (sessions.length === 0) {

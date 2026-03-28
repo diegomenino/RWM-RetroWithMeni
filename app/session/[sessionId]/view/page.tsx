@@ -62,7 +62,7 @@ export default function SessionViewPage() {
   }, [sessionId]);
 
   if (loading || !session) {
-    return <main className="min-h-screen flex items-center justify-center">{t('auth.loading')}</main>;
+    return <main className="min-h-screen flex items-center justify-center">{t('common.loading')}</main>;
   }
 
   const phaseLabel: Record<string, string> = {
@@ -73,15 +73,15 @@ export default function SessionViewPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 p-4">
+    <main className="min-h-screen p-4" style={{ background: 'var(--bg)' }}>
       <div className="max-w-6xl mx-auto">
 
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
             <Link href="/" className="text-sm text-indigo-500 hover:underline mb-1 block">← {t('view.back')}</Link>
-            <h1 className="text-2xl font-bold text-gray-800">{session.name}</h1>
-            <p className="text-sm text-gray-400 mt-0.5">
+            <h1 className="text-2xl font-bold" style={{ color: 'var(--text)' }}>{session.name}</h1>
+            <p className="text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>
               {t('view.id')}: <span className="font-mono">{session.id}</span>
               {' · '}{t('view.phase')}: <span className="font-medium">{phaseLabel[session.phase] ?? session.phase}</span>
               {' · '}{t('view.readOnly')}
@@ -107,13 +107,13 @@ export default function SessionViewPage() {
 
                 <div className={`${col.color} p-3 space-y-2 min-h-[120px]`}>
                   {colCards.length === 0 && (
-                    <p className="text-xs text-gray-400 text-center pt-4">{t('view.noCards')}</p>
+                    <p className="text-xs text-center pt-4" style={{ color: 'var(--text-muted)' }}>{t('view.noCards')}</p>
                   )}
                   {colCards.map(card => (
-                    <div key={card.id} className="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
-                      <p className="text-sm text-gray-800 whitespace-pre-wrap">{card.content}</p>
+                    <div key={card.id} className="rounded-lg p-3 shadow-sm" style={{ background: 'var(--surface-solid)', border: '1px solid var(--border)' }}>
+                      <p className="text-sm whitespace-pre-wrap" style={{ color: 'var(--text)' }}>{card.content}</p>
                       <div className="flex items-center justify-between mt-2">
-                        <span className="text-xs text-gray-400">{card.authorName}</span>
+                        <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{card.authorName}</span>
                         {card.voteCount > 0 && (
                           <span className="text-xs bg-indigo-100 text-indigo-600 font-medium px-2 py-0.5 rounded-full">
                             👍 {card.voteCount}
@@ -129,7 +129,7 @@ export default function SessionViewPage() {
         </div>
 
         {session.phase !== 'done' && (
-          <p className="text-center text-xs text-gray-400 mt-6">
+          <p className="text-center text-xs mt-6" style={{ color: 'var(--text-muted)' }}>
             {t('view.inProgress')}
           </p>
         )}

@@ -1,5 +1,4 @@
 import { notFound } from 'next/navigation';
-import { auth } from '@/lib/auth';
 import { getSession } from '@/lib/db-queries';
 import { getColumns } from '@/lib/retro-formats';
 import { SocketProvider } from '@/components/providers/SocketProvider';
@@ -15,8 +14,6 @@ export default async function SessionPage({ params }: PageProps) {
   if (!session) notFound();
 
   const columns = getColumns(session.format);
-  const authSession = await auth();
-  const authDisplayName = authSession?.user?.name ?? undefined;
 
   const sessionData = {
     id: session.id,
@@ -28,7 +25,7 @@ export default async function SessionPage({ params }: PageProps) {
   };
 
   return (
-    <SocketProvider sessionId={sessionId} authDisplayName={authDisplayName}>
+    <SocketProvider sessionId={sessionId}>
       <RetroBoard
         sessionId={sessionId}
         initialSession={sessionData}

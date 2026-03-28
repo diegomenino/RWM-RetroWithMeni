@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { AuthProvider } from '@/components/providers/AuthProvider';
 import { LanguageProvider } from '@/components/providers/LanguageProvider';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { LanguageToggle } from '@/components/LanguageToggle';
@@ -18,7 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={`${inter.className} min-h-screen`}>
         <LanguageProvider>
-          <AuthProvider>{children}</AuthProvider>
+          {children}
           <div className="fixed bottom-2 left-3 text-[11px] select-none pointer-events-none" style={{ color: 'var(--text-subtle)' }}>
             v{process.env.NEXT_PUBLIC_APP_VERSION}
           </div>

@@ -5,24 +5,14 @@ services:
       dockerfile: Dockerfile
     image: rwm:latest
     ports:
-      - "3001:3000"
+      - "8100:3000"
     volumes:
       - rwm-data:/app/data
     environment:
       - NODE_ENV=production
       - PORT=3000
       - DB_PATH=/app/data/retro.db
-      - NEXT_PUBLIC_APP_URL=http://localhost:3000
-      # NextAuth — required
-      - NEXTAUTH_URL=http://localhost:3000
-      - NEXTAUTH_SECRET=change-me-use-openssl-rand-base64-32
-      # Google SSO (optional — remove if not using)
-      - GOOGLE_CLIENT_ID=
-      - GOOGLE_CLIENT_SECRET=
-      # Microsoft Azure AD SSO (optional — remove if not using)
-      - AZURE_AD_CLIENT_ID=
-      - AZURE_AD_CLIENT_SECRET=
-      - AZURE_AD_TENANT_ID=
+      - NEXT_PUBLIC_APP_URL=http://192.168.68.50:8100
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
