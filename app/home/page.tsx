@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { CreateSessionForm } from '@/components/session/CreateSessionForm';
+import { JoinSessionForm } from '@/components/session/JoinSessionForm';
 import { LookupSessionForm } from '@/components/session/LookupSessionForm';
 import { SessionList } from '@/components/session/SessionList';
 import { useLanguage } from '@/components/providers/LanguageProvider';
@@ -23,6 +24,11 @@ export default function HomePage() {
         <div className="p-6 relative z-10" style={{ background: 'var(--surface)', backdropFilter: 'blur(20px)', borderRadius: '24px', border: '1px solid var(--border)', boxShadow: 'var(--panel-shadow)' }}>
           <h2 className="text-[17px] font-extrabold mb-4" style={{ color: 'var(--text)' }}>{t('home.createSession')}</h2>
           <CreateSessionForm />
+        </div>
+
+        <div className="p-5 mt-4 relative z-10" style={{ background: 'var(--surface)', backdropFilter: 'blur(20px)', borderRadius: '20px', border: '1px solid var(--border)', boxShadow: 'var(--panel-shadow)' }}>
+          <h2 className="text-sm font-bold mb-3" style={{ color: 'var(--text-secondary)' }}>{t('home.joinSession')}</h2>
+          <JoinSessionForm />
         </div>
 
         <div className="p-5 mt-4 relative z-10" style={{ background: 'var(--surface)', backdropFilter: 'blur(20px)', borderRadius: '20px', border: '1px solid var(--border)', boxShadow: 'var(--panel-shadow)' }}>
