@@ -39,8 +39,9 @@ export async function POST(req: NextRequest) {
       maxVotes: typeof maxVotes === 'number' && maxVotes > 0 ? maxVotes : 3,
     });
 
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-    const shareUrl = `${appUrl}/session/${sessionId}`;
+    const proto = req.headers.get('x-forwarded-proto') ?? 'http';
+    const host = req.headers.get('x-forwarded-host') ?? req.headers.get('host') ?? 'localhost:3000';
+    const shareUrl = `${proto}://${host}/session/${sessionId}`;
 
     return NextResponse.json({ sessionId, facilitatorToken, shareUrl }, { status: 201 });
   } catch (err) {
