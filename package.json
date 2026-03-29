@@ -1,6 +1,6 @@
 {
   "name": "rwm",
-  "version": "1.4",
+  "version": "1.5",
   "private": true,
   "scripts": {
     "dev": "NODE_ENV=development node server.js",
