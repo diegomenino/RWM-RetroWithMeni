@@ -62,7 +62,13 @@ export function SocketProvider({ sessionId, children }: SocketProviderProps) {
     const initialName = storedName || globalName || '';
     setDisplayNameState(initialName);
 
-    const s = io({ path: '/socket.io', transports: ['polling', 'websocket'] });
+    const socketUrl = typeof window !== 'undefined' ? window.location.origin : '';
+    console.log('[RWM] Connecting socket to:', socketUrl, '| path: /socket.io');
+    const s = io(socketUrl, { path: '/socket.io', transports: ['websocket', 'polling'] });
+
+    s.on('connect_error', (err) => {
+      console.error('[RWM] Socket connect_error:', err.message, err);
+    });
 
     s.on('connect', () => {
       setIsConnected(true);
