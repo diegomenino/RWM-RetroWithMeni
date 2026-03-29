@@ -62,7 +62,7 @@ export function SocketProvider({ sessionId, children }: SocketProviderProps) {
     const initialName = storedName || globalName || '';
     setDisplayNameState(initialName);
 
-    const s = io({ path: '/socket.io', transports: ['websocket'] });
+    const s = io({ path: '/socket.io', transports: ['polling', 'websocket'] });
 
     s.on('connect', () => {
       setIsConnected(true);
