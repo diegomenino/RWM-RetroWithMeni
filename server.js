@@ -6,7 +6,7 @@ const { registerHandlers } = require('./socket/handlers');
 const { version } = require('./package.json');
 
 const dev = process.env.NODE_ENV !== 'production';
-const hostname = process.env.HOSTNAME || 'localhost';
+const hostname = process.env.HOST || 'localhost';
 const port = parseInt(process.env.PORT || '3000', 10);
 
 // Set the app version for the frontend
@@ -20,6 +20,7 @@ const handle = app.getRequestHandler();
 app.prepare().then(() => {
   const httpServer = createServer(async (req, res) => {
     try {
+      if (req.url?.startsWith('/socket.io')) return;
       const parsedUrl = parse(req.url, true);
       await handle(req, res, parsedUrl);
     } catch (err) {
