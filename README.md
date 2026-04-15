@@ -57,7 +57,7 @@ Default format is **Went Well / Improve / Actions**. Default votes per person is
 docker compose up --build
 ```
 
-The app will be available at **http://localhost:8100**
+The app will be available at **http://localhost:8101**
 
 ### Other useful commands
 
@@ -75,7 +75,7 @@ docker compose down
 docker compose down -v
 ```
 
-> To change the external port, edit the `ports` mapping in `docker-compose.yml` (default: `8100:3000`).
+> To change the external port, edit the `ports` mapping in `docker-compose.yml` (default: `8101:3000`).
 
 ---
 
@@ -216,7 +216,7 @@ El formato predeterminado es **Qué salió Bien / Cosas a Mejorar / Acciones**. 
 docker compose up --build
 ```
 
-La aplicación estará disponible en **http://localhost:8100**
+La aplicación estará disponible en **http://localhost:8101**
 
 ### Otros comandos útiles
 
@@ -234,7 +234,7 @@ docker compose down
 docker compose down -v
 ```
 
-> Para cambiar el puerto externo, edita el mapeo de `ports` en `docker-compose.yml` (por defecto: `8100:3000`).
+> Para cambiar el puerto externo, edita el mapeo de `ports` en `docker-compose.yml` (por defecto: `8101:3000`).
 
 ---
 
