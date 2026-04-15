@@ -1,6 +1,6 @@
 # RWM — Retro With Meni
 
-**v1.3**
+**v1.6**
 
 A real-time collaborative retrospective tool for agile teams. Create a session, invite your team via a shared link, and run structured retrospectives together — live, in the browser.
 
@@ -159,7 +159,7 @@ MIT
 
 # RWM — Retro With Meni *(Español)*
 
-**v1.3**
+**v1.6**
 
 Una herramienta de retrospectiva colaborativa en tiempo real para equipos ágiles. Crea una sesión, invita a tu equipo mediante un enlace compartido y lleven a cabo retrospectivas estructuradas juntos — en vivo, desde el navegador.
 
