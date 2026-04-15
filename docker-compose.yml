@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     image: rwm:latest
     ports:
-      - "8100:3000"
+      - "8101:3000"
     volumes:
       - rwm-data:/app/data
     environment:
