@@ -6,7 +6,9 @@
     "dev": "node server.js",
     "build": "next build",
     "start": "node server.js",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test:e2e": "playwright test",
+    "test:setup": "node lib/test-data.js"
   },
   "dependencies": {
     "@azure/msal-node": "^5.1.4",
@@ -25,6 +27,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "@types/bcryptjs": "^2.4.6",
     "@types/better-sqlite3": "^7.6.10",
     "@types/node": "^20.12.7",
