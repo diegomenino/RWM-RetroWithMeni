@@ -11,7 +11,7 @@
     "test:setup": "node lib/test-data.js"
   },
   "dependencies": {
-    "@azure/msal-node": "^5.1.5",
+    "@azure/msal-node": "^5.2.0",
     "autoprefixer": "^10.5.0",
     "bcryptjs": "^3.0.3",
     "better-sqlite3": "^12.8.0",
