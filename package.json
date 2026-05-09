@@ -17,7 +17,7 @@
     "better-sqlite3": "^12.8.0",
     "iron-session": "^8.0.4",
     "ldapts": "^8.1.7",
-    "next": "^16.2.1",
+    "next": "^16.2.6",
     "postcss": "^8.4.38",
     "react": "^19.2.5",
     "react-dom": "^19.0.0",
