@@ -1,5 +1,5 @@
 # Stage 1: Install dependencies (including native build for better-sqlite3)
-FROM node:25-alpine AS deps
+FROM node:26-alpine AS deps
 RUN apk add --no-cache python3 make g++
 RUN npm install -g npm@latest
 WORKDIR /app
@@ -7,7 +7,7 @@ COPY package*.json ./
 RUN npm install
 
 # Stage 2: Build Next.js app
-FROM node:25-alpine AS builder
+FROM node:26-alpine AS builder
 RUN npm install -g npm@latest
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
@@ -15,7 +15,7 @@ COPY . .
 RUN npm run build && mkdir -p /app/public
 
 # Stage 3: Production runner
-FROM node:25-alpine AS runner
+FROM node:26-alpine AS runner
 RUN apk add --no-cache wget
 WORKDIR /app
 ENV NODE_ENV=production
